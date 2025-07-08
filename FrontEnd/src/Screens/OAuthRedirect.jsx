@@ -17,16 +17,16 @@ const OAuthRedirect = () => {
         if (response.data) {
           localStorage.setItem('user', JSON.stringify(response.data));
           setIsLogin(true)
-          navigate('/home/myspace/Overview');
+          navigate('/dashboard');
         }
       } catch (error) {
         console.error('Error fetching user profile:', error);
-        navigate('/login'); // Redirect to login if fetching profile fails
+        navigate('/'); // Redirect to login if fetching profile fails
       }
     };
 
     getUserProfile();
-  }, [history]);
+  }, [navigate]);
 
   return <div>Redirecting...</div>;
 };

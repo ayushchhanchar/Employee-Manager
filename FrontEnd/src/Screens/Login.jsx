@@ -33,7 +33,7 @@ const LoginTest = () => {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         setIsLogin(true);
-        navigate('/home/myspace/Overview');
+        navigate('/dashboard');
       } else {
         // alert('Login failed: Invalid credentials');
       }
