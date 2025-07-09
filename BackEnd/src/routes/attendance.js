@@ -61,31 +61,27 @@ router.get('/', authMiddleware, async (req, res) => {
 // Check in
 router.post('/checkin', authMiddleware, async (req, res) => {
   try {
+    console.log('🟢 Check-in API called by user:', req.user);
+
     const { location } = req.body;
-    
+
     const employee = await Employee.findOne({ user: req.user._id });
     if (!employee) {
+      console.log('🔴 Employee profile not found');
       return res.status(404).json({ success: false, message: 'Employee profile not found' });
     }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Check if already checked in today
-    let attendance = await Attendance.findOne({
-      employee: employee._id,
-      date: today
-    });
+    let attendance = await Attendance.findOne({ employee: employee._id, date: today });
+    console.log('📋 Existing attendance for today:', attendance);
 
     if (attendance && attendance.checkIn) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Already checked in today' 
-      });
+      return res.status(400).json({ success: false, message: 'Already checked in today' });
     }
 
     const checkInTime = new Date();
-    
     if (!attendance) {
       attendance = new Attendance({
         employee: employee._id,
@@ -101,16 +97,15 @@ router.post('/checkin', authMiddleware, async (req, res) => {
     }
 
     await attendance.save();
+    console.log('✅ Attendance saved:', attendance);
 
-    res.json({
-      success: true,
-      message: 'Checked in successfully',
-      data: attendance
-    });
+    res.json({ success: true, message: 'Checked in successfully', data: attendance });
   } catch (error) {
+    console.error('🔥 Error during check-in:', error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
 
 // Check out
 router.post('/checkout', authMiddleware, async (req, res) => {

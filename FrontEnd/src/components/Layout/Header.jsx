@@ -23,6 +23,14 @@ const Header = () => {
 
   useEffect(() => {
     fetchUnreadCount();
+    fetchNotifications();
+
+    const interval = setInterval(() => {
+      fetchUnreadCount();
+      fetchNotifications();
+    }, 60000); // every 60 sec
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchUnreadCount = async () => {
@@ -34,6 +42,38 @@ const Header = () => {
       }));
     } catch (error) {
       console.error('Error fetching unread count:', error);
+    }
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await notificationAPI.getAll({ limit: 5 });
+      setNotifications(prev => ({
+        ...prev,
+        notifications: response.data.data || []
+      }));
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  const markAsReadAndNavigate = async (notification) => {
+    try {
+      if (!notification.isRead) {
+        await notificationAPI.markAsRead(notification._id);
+        fetchUnreadCount();
+        fetchNotifications();
+      }
+
+      if (notification.type === 'Announcement') {
+        navigate(`/announcements/${notification.data.announcementId}`);
+      } else if (notification.type === 'Leave') {
+        navigate(`/leave-requests/${notification.data.leaveId}`);
+      } else {
+        navigate('/notifications');
+      }
+    } catch (err) {
+      console.error('Error handling notification click:', err);
     }
   };
 
@@ -102,9 +142,10 @@ const Header = () => {
                 </div>
                 <div className="max-h-64 overflow-y-auto">
                   {notifications.notifications.length > 0 ? (
-                    notifications.notifications.slice(0, 5).map((notification) => (
+                    notifications.notifications.map((notification) => (
                       <div
                         key={notification._id}
+                        onClick={() => markAsReadAndNavigate(notification)}
                         className={`px-4 py-3 hover:bg-gray-50 cursor-pointer ${
                           !notification.isRead ? 'bg-blue-50' : ''
                         }`}

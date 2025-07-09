@@ -4,7 +4,6 @@ const EmployeeSchema = new mongoose.Schema({
   employeeId: {
     type: String,
     unique: true,
-    required: true
   },
   personalInfo: {
     firstName: { type: String, required: true },
@@ -43,13 +42,33 @@ const EmployeeSchema = new mongoose.Schema({
 });
 
 // Generate employee ID before saving
-EmployeeSchema.pre('save', async function(next) {
-  if (!this.employeeId) {
-    const count = await mongoose.model('Employee').countDocuments();
-    this.employeeId = `EMP${String(count + 1).padStart(4, '0')}`;
+// Generate unique employee ID before saving
+EmployeeSchema.pre('save', async function (next) {
+  try {
+    if (!this.employeeId) {
+      const lastEmployee = await mongoose
+        .model('Employee')
+        .findOne({})
+        .sort({ createdAt: -1 }) // or sort({ employeeId: -1 }) if using numeric suffix
+        .lean();
+
+      let nextId = 1;
+
+      if (lastEmployee && lastEmployee.employeeId) {
+        const lastNumber = parseInt(lastEmployee.employeeId.replace('EMP', ''), 10);
+        if (!isNaN(lastNumber)) nextId = lastNumber + 1;
+      }
+
+      this.employeeId = `EMP${String(nextId).padStart(4, '0')}`;
+    }
+
+    this.updatedAt = Date.now();
+    next();
+  } catch (err) {
+    next(err);
   }
-  this.updatedAt = Date.now();
-  next();
 });
+
+
 
 module.exports = mongoose.model('Employee', EmployeeSchema);
