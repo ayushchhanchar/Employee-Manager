@@ -8,7 +8,6 @@ import {
   DocumentTextIcon,
   UsersIcon,
   CurrencyDollarIcon,
-  SpeakerphoneIcon,
   Bars3Icon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
@@ -53,7 +52,7 @@ const Sidebar = () => {
     },
     {
       name: 'Announcements',
-      icon: SpeakerphoneIcon,
+      icon: CurrencyDollarIcon,
       path: '/announcements',
       roles: ['admin', 'hr', 'user']
     },

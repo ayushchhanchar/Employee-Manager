@@ -6,7 +6,6 @@ import {
   CalendarDaysIcon,
   CurrencyDollarIcon,
   ChartBarIcon,
-  TrendingUpIcon
 } from '@heroicons/react/24/outline';
 import { dashboardStatsState } from '../../store/authStore';
 import { employeeAPI, attendanceAPI, leaveAPI, payrollAPI } from '../../services/api';
@@ -173,7 +172,7 @@ const AdminDashboard = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Leave Types Distribution</h3>
-            <TrendingUpIcon className="w-5 h-5 text-gray-400" />
+            <ChartBarIcon className="w-5 h-5 text-gray-400" />
           </div>
           <Chart
             type="doughnut"
