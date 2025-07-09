@@ -114,4 +114,10 @@ export const payrollAPI = {
   getSummary: (params) => api.get('/payroll/summary', { params }),
 };
 
+export const userAPI = {
+  getProfile: () => api.get('/user/profile'),
+  updateProfile: (data) => api.put('/user/profile', data),
+};
+
+
 export default api;

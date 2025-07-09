@@ -12,6 +12,7 @@ import Payroll from "./pages/adminPages/Payroll";
 import Announcements from "./pages/adminPages/Announcements"; 
 import Holidays from "./pages/adminPages/Holidays";
 import NotificationPage from "./pages/NotificationPage";
+import ProfilePage from "./pages/ProfilePage";
 
 
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/announcements" element={<PrivateRoute element={Announcements} />} />
           <Route path="/holidays" element={<PrivateRoute element={Holidays} />} />
           <Route path="/notifications" element={<PrivateRoute element={NotificationPage} />} />
+          <Route path="/profile" element={<PrivateRoute element={ProfilePage} />} />
         </Routes>
         </BrowserRouter>
       </RecoilRoot>
