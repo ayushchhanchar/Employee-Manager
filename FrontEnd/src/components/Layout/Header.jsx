@@ -6,7 +6,9 @@ import {
   MagnifyingGlassIcon,
   Cog6ToothIcon,
   UserCircleIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  SunIcon,
+  MoonIcon
 } from '@heroicons/react/24/outline';
 import { CollapsedAtom } from '../../atom/Collapsed';
 import { authState } from '../../store/authStore';
@@ -19,6 +21,8 @@ const Header = () => {
   const [notifications, setNotifications] = useRecoilState(notificationState);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +32,7 @@ const Header = () => {
     const interval = setInterval(() => {
       fetchUnreadCount();
       fetchNotifications();
-    }, 60000); // every 60 sec
+    }, 60000);
 
     return () => clearInterval(interval);
   }, []);
@@ -66,12 +70,13 @@ const Header = () => {
       }
 
       if (notification.type === 'Announcement') {
-        navigate(`/announcements/${notification.data.announcementId}`);
+        navigate(`/announcements`);
       } else if (notification.type === 'Leave') {
-        navigate(`/leave-requests/${notification.data.leaveId}`);
+        navigate(`/leaves`);
       } else {
         navigate('/notifications');
       }
+      setShowNotifications(false);
     } catch (err) {
       console.error('Error handling notification click:', err);
     }
@@ -100,26 +105,65 @@ const Header = () => {
     setShowNotifications(false);
   };
 
+  const getCurrentTime = () => {
+    return new Date().toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
+  const getCurrentDate = () => {
+    return new Date().toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
   return (
     <header className={`
-      fixed top-0 right-0 h-16 bg-white border-b border-gray-200 z-40 transition-all duration-300
-      ${isCollapsed ? 'left-16' : 'left-64'}
+      fixed top-0 right-0 h-16 bg-white/80 backdrop-blur-md border-b border-gray-200 z-40 transition-all duration-300
+      ${isCollapsed ? 'left-20' : 'left-72'}
     `}>
       <div className="flex items-center justify-between h-full px-6">
-        {/* Search */}
-        <div className="flex items-center flex-1 max-w-md">
-          <div className="relative w-full">
+        {/* Left Section - Search & Time */}
+        <div className="flex items-center space-x-6">
+          {/* Search */}
+          <div className="relative">
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Search anything..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-80 pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
             />
+          </div>
+
+          {/* Time & Date */}
+          <div className="hidden lg:block">
+            <div className="text-right">
+              <p className="text-sm font-semibold text-gray-900">{getCurrentTime()}</p>
+              <p className="text-xs text-gray-500">{getCurrentDate()}</p>
+            </div>
           </div>
         </div>
 
-        {/* Right side */}
+        {/* Right Section */}
         <div className="flex items-center space-x-4">
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            {darkMode ? (
+              <SunIcon className="w-5 h-5" />
+            ) : (
+              <MoonIcon className="w-5 h-5" />
+            )}
+          </button>
+
           {/* Notifications */}
           <div className="relative">
             <button
@@ -128,7 +172,7 @@ const Header = () => {
             >
               <BellIcon className="w-6 h-6" />
               {notifications.unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
                   {notifications.unreadCount > 9 ? '9+' : notifications.unreadCount}
                 </span>
               )}
@@ -136,9 +180,14 @@ const Header = () => {
 
             {/* Notifications Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                <div className="px-4 py-2 border-b border-gray-200">
-                  <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+              <div className="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 max-h-96 overflow-y-auto">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
+                    {notifications.unreadCount > 0 && (
+                      <span className="badge-info">{notifications.unreadCount} new</span>
+                    )}
+                  </div>
                 </div>
                 <div className="max-h-64 overflow-y-auto">
                   {notifications.notifications.length > 0 ? (
@@ -146,27 +195,38 @@ const Header = () => {
                       <div
                         key={notification._id}
                         onClick={() => markAsReadAndNavigate(notification)}
-                        className={`px-4 py-3 hover:bg-gray-50 cursor-pointer ${
-                          !notification.isRead ? 'bg-blue-50' : ''
+                        className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-l-4 transition-colors ${
+                          !notification.isRead ? 'bg-blue-50 border-l-blue-500' : 'border-l-transparent'
                         }`}
                       >
-                        <p className="text-sm font-medium text-gray-900">{notification.title}</p>
-                        <p className="text-xs text-gray-600 mt-1">{notification.message}</p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          {new Date(notification.createdAt).toLocaleDateString()}
-                        </p>
+                        <div className="flex items-start space-x-3">
+                          <div className={`w-2 h-2 rounded-full mt-2 ${
+                            !notification.isRead ? 'bg-blue-500' : 'bg-gray-300'
+                          }`}></div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">{notification.title}</p>
+                            <p className="text-xs text-gray-600 mt-1 line-clamp-2">{notification.message}</p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {new Date(notification.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     ))
                   ) : (
-                    <div className="px-4 py-3 text-sm text-gray-500 text-center">
-                      No notifications
+                    <div className="px-4 py-8 text-center">
+                      <BellIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-sm text-gray-500">No notifications</p>
                     </div>
                   )}
                 </div>
-                <div className="px-4 py-2 border-t border-gray-200">
+                <div className="px-4 py-3 border-t border-gray-200">
                   <button
-                    onClick={() => navigate('/notifications')}
-                    className="text-sm text-blue-600 hover:text-blue-800"
+                    onClick={() => {
+                      navigate('/notifications');
+                      setShowNotifications(false);
+                    }}
+                    className="w-full text-sm text-blue-600 hover:text-blue-800 font-medium"
                   >
                     View all notifications
                   </button>
@@ -186,12 +246,12 @@ const Header = () => {
               onClick={toggleProfileMenu}
               className="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">
                   {auth.user?.username?.charAt(0).toUpperCase() || 'U'}
                 </span>
               </div>
-              <div className="text-left">
+              <div className="text-left hidden md:block">
                 <p className="text-sm font-medium text-gray-900">{auth.user?.username}</p>
                 <p className="text-xs text-gray-500 capitalize">{auth.user?.role}</p>
               </div>
@@ -199,20 +259,30 @@ const Header = () => {
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <p className="text-sm font-medium text-gray-900">{auth.user?.username}</p>
+                  <p className="text-xs text-gray-500">{auth.user?.email}</p>
+                </div>
                 <button
-                  onClick={() => navigate('/profile')}
+                  onClick={() => {
+                    navigate('/profile');
+                    setShowProfileMenu(false);
+                  }}
                   className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   <UserCircleIcon className="w-4 h-4 mr-3" />
-                  Profile
+                  Profile Settings
                 </button>
                 <button
-                  onClick={() => navigate('/settings')}
+                  onClick={() => {
+                    navigate('/settings');
+                    setShowProfileMenu(false);
+                  }}
                   className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   <Cog6ToothIcon className="w-4 h-4 mr-3" />
-                  Settings
+                  Preferences
                 </button>
                 <hr className="my-2" />
                 <button
@@ -220,7 +290,7 @@ const Header = () => {
                   className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                 >
                   <ArrowRightOnRectangleIcon className="w-4 h-4 mr-3" />
-                  Logout
+                  Sign Out
                 </button>
               </div>
             )}

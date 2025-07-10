@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom';
 
 const QuickActions = ({ actions = [] }) => {
   const colorClasses = {
-    blue: 'bg-blue-600 hover:bg-blue-700',
-    green: 'bg-green-600 hover:bg-green-700',
-    red: 'bg-red-600 hover:bg-red-700',
-    purple: 'bg-purple-600 hover:bg-purple-700',
-    yellow: 'bg-yellow-600 hover:bg-yellow-700'
+    blue: 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800',
+    green: 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800',
+    red: 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800',
+    purple: 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800',
+    yellow: 'bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800'
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
       <div className="p-6 border-b border-gray-200">
         <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+        <p className="text-sm text-gray-500 mt-1">Frequently used actions</p>
       </div>
       <div className="p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -28,16 +29,24 @@ const QuickActions = ({ actions = [] }) => {
                 key={index}
                 {...props}
                 className={`
-                  p-4 rounded-lg text-white text-center transition-all duration-200
+                  group p-4 rounded-xl text-white text-center transition-all duration-200 relative overflow-hidden
                   ${colorClasses[action.color] || colorClasses.blue}
                   ${action.disabled 
                     ? 'opacity-50 cursor-not-allowed' 
-                    : 'hover:shadow-md transform hover:-translate-y-0.5'
+                    : 'hover:shadow-lg transform hover:-translate-y-1'
                   }
                 `}
               >
-                <h4 className="font-semibold">{action.title}</h4>
-                <p className="text-sm opacity-90 mt-1">{action.description}</p>
+                <div className="relative z-10">
+                  {action.icon && (
+                    <action.icon className="w-6 h-6 mx-auto mb-2" />
+                  )}
+                  <h4 className="font-semibold text-sm">{action.title}</h4>
+                  <p className="text-xs opacity-90 mt-1">{action.description}</p>
+                </div>
+                
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
               </Component>
             );
           })}
