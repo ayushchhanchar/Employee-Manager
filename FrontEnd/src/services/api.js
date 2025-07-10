@@ -48,10 +48,8 @@ export const employeeAPI = {
   getAll: (params) => api.get('/employees', { params }),
   getById: (id) => api.get(`/employees/${id}`),
   create: (data) => api.post('/employees', data),
-  // update: (id, data) => api.put(`/employees/${id}`, data),
-  // delete: (id) => api.delete(`/employees/${id}`),
-  update: (id, data) => axios.put(`/employees/${id}`, data),
-  remove: (id) => axios.delete(`/employees/${id}`),
+  update: (id, data) => api.put(`/employees/${id}`, data),
+  remove: (id) => api.delete(`/employees/${id}`),
   getDashboardStats: () => api.get('/employees/dashboard/stats'),
 };
 
@@ -114,10 +112,10 @@ export const payrollAPI = {
   getSummary: (params) => api.get('/payroll/summary', { params }),
 };
 
+// User API
 export const userAPI = {
-  getProfile: () => api.get('/user/profile'),
-  updateProfile: (data) => api.put('/user/profile', data),
+  getProfile: () => api.get('/auth/profile'),
+  updateProfile: (data) => api.put('/auth/profile', data),
 };
-
 
 export default api;

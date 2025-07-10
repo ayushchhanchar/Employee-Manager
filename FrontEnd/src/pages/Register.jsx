@@ -8,9 +8,10 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
-    role: 'User'
+    role: 'user'
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -18,11 +19,17 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+    
     try {
       await authAPI.register(form);
+      alert('Registration successful! Please login.');
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,11 +71,17 @@ const Register = () => {
           onChange={handleChange}
           className="input"
         >
-          <option value="employee">User</option>
+          <option value="user">User</option>
           <option value="admin">Admin</option>
           <option value="hr">HR</option>
         </select>
-        <button type="submit" className="btn-blue w-full">Register</button>
+        <button 
+          type="submit" 
+          className="btn-blue w-full disabled:opacity-50"
+          disabled={loading}
+        >
+          {loading ? 'Registering...' : 'Register'}
+        </button>
         <p className="text-sm text-center">
           Already have an account? <a href="/" className="text-blue-600">Login</a>
         </p>
