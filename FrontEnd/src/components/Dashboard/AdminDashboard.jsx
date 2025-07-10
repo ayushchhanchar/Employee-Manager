@@ -130,7 +130,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pl-6 fade-in">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>

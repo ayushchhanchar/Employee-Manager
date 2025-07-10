@@ -15,7 +15,7 @@ export const userRoleSelector = selector({
   key: 'userRoleSelector',
   get: ({ get }) => {
     const auth = get(authState);
-    return auth.user?.role || 'employee';
+    return auth.user?.role || 'User';
   },
 });
 

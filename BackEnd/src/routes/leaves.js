@@ -51,7 +51,14 @@ router.get('/', authMiddleware, async (req, res) => {
     }
 
     const leaves = await Leave.find(filter)
-      .populate('employee', 'employeeId personalInfo.firstName personalInfo.lastName workInfo.department')
+      .populate({
+        path: 'employee',
+        select: 'personalInfo.firstName personalInfo.lastName user',
+        populate: {
+          path: 'user',
+          select: 'email username'
+        }
+      })
       .populate('approvedBy', 'username email')
       .sort({ appliedDate: -1 })
       .skip(skip)
@@ -192,10 +199,10 @@ router.put('/:id/status', authMiddleware, roleAuth('admin', 'hr'), async (req, r
 
     // Send email notification
     await sendEmail(
-      leave.employee.personalInfo.email,
+      leave.employee.user.email,  // ✅ now properly populated
       'leaveStatusUpdate',
       [
-        leave.employee.personalInfo.firstName + ' ' + leave.employee.personalInfo.lastName,
+        `${leave.employee.personalInfo.firstName} ${leave.employee.personalInfo.lastName}`,
         leave.leaveType,
         status,
         leave.startDate,

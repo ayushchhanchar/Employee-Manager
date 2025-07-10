@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -13,7 +14,7 @@ const payrollRoutes = require('./src/routes/payroll');
 const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
+
 require('./src/config/Passport');
 
 const app = express();

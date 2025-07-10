@@ -230,3 +230,13 @@
     @apply animate-spin rounded-full border-2 border-gray-300 border-t-blue-600;
   }
 }
+.dark-calendar {
+  background-color: #1f2937;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+.react-calendar__tile--active {
+  background: #6366f1;
+  color: white;
+}

@@ -152,17 +152,8 @@ const Header = () => {
 
         {/* Right Section */}
         <div className="flex items-center space-x-4">
-          {/* Dark Mode Toggle */}
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            {darkMode ? (
-              <SunIcon className="w-5 h-5" />
-            ) : (
-              <MoonIcon className="w-5 h-5" />
-            )}
-          </button>
+          
+         
 
           {/* Notifications */}
           <div className="relative">

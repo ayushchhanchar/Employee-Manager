@@ -3,7 +3,7 @@ const Employee = require('../models/Employee');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/auth');
 const roleAuth = require('../middleware/roleAuth');
-const { employeeValidation, validate } = require('../middleware/validation');
+const { employeeUpdateValidation, validate } = require('../middleware/validation');
 const { sendEmail } = require('../services/emailService');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
@@ -74,7 +74,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // Create new employee (Admin/HR only)
-router.post('/', authMiddleware, roleAuth('admin', 'hr'), employeeValidation, validate, async (req, res) => {
+router.post('/', authMiddleware, roleAuth('admin', 'hr'), employeeUpdateValidation, validate, async (req, res) => {
   try {
     const { personalInfo, workInfo, createUser = true } = req.body;
 
@@ -132,41 +132,64 @@ router.post('/', authMiddleware, roleAuth('admin', 'hr'), employeeValidation, va
 });
 
 // Update employee
-router.put('/:id', authMiddleware, employeeValidation, validate, async (req, res) => {
+// Update employee (Admin/HR can update everything, user can update limited fields)
+router.put('/:id', authMiddleware, employeeUpdateValidation, validate, async (req, res) => {
   try {
     const { personalInfo, workInfo, status } = req.body;
-    
+
+
     const employee = await Employee.findById(req.params.id);
+
     if (!employee) {
       return res.status(404).json({ success: false, message: 'Employee not found' });
     }
 
-    // Check permissions
-    if (req.user.role === 'user' && employee.user.toString() !== req.user._id.toString()) {
+    // Safeguard permission check
+    if (req.user?.role === 'user' && employee.user?.toString() !== req.user?._id?.toString()) {
       return res.status(403).json({ success: false, message: 'Access denied' });
     }
 
-    // Update employee data
-    if (personalInfo) employee.personalInfo = { ...employee.personalInfo, ...personalInfo };
-    if (workInfo && ['admin', 'hr'].includes(req.user.role)) {
-      employee.workInfo = { ...employee.workInfo, ...workInfo };
+    // Apply updates
+    if (personalInfo) {
+      for (const key in personalInfo) {
+        if (personalInfo[key] !== undefined) {
+          employee.personalInfo[key] = personalInfo[key];
+        }
+      }
     }
-    if (status && ['admin', 'hr'].includes(req.user.role)) {
+
+    if (workInfo && ['admin', 'hr'].includes(req.user.role)) {
+      for (const key in workInfo) {
+        if (workInfo[key] !== undefined) {
+          employee.workInfo[key] = workInfo[key];
+        }
+      }
+  }
+
+    if (status && ['admin', 'hr'].includes(req.user?.role)) {
       employee.status = status;
     }
 
-    await employee.save();
-    await employee.populate('user', 'username email role');
+    try {
+      await employee.save();
+      await employee.populate('user', 'username email role');
+    } catch (saveError) {
+      console.error('Save failed:', saveError);
+      return res.status(500).json({ success: false, message: 'Error saving employee data', error: saveError.message });
+    }
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Employee updated successfully',
       data: employee
     });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Update route error:', error); // Detailed backend error
+    res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
   }
 });
+
 
 // Delete employee (Admin only)
 router.delete('/:id', authMiddleware, roleAuth('admin'), async (req, res) => {

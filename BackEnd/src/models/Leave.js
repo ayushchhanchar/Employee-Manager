@@ -9,7 +9,7 @@ const LeaveSchema = new mongoose.Schema({
   },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
-  totalDays: { type: Number, required: true },
+  totalDays: { type: Number},
   reason: { type: String, required: true },
   status: { 
     type: String, 

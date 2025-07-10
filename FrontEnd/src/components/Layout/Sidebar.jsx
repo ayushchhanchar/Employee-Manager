@@ -72,13 +72,6 @@ const Sidebar = () => {
       roles: ['admin', 'hr', 'user'],
       description: 'Holiday Calendar'
     },
-    {
-      name: 'Notifications',
-      icon: BellIcon,
-      path: '/notifications',
-      roles: ['admin', 'hr', 'user'],
-      description: 'System Alerts'
-    }
   ];
 
   const filteredMenuItems = menuItems.filter(item => 

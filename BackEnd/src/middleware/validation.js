@@ -14,14 +14,25 @@ const validate = (req, res, next) => {
 };
 
 // Employee validation rules
-const employeeValidation = [
-  body('personalInfo.firstName').notEmpty().withMessage('First name is required'),
-  body('personalInfo.lastName').notEmpty().withMessage('Last name is required'),
-  body('personalInfo.email').isEmail().withMessage('Valid email is required'),
-  body('personalInfo.phone').notEmpty().withMessage('Phone number is required'),
-  body('workInfo.department').notEmpty().withMessage('Department is required'),
-  body('workInfo.designation').notEmpty().withMessage('Designation is required'),
-  body('workInfo.joiningDate').isISO8601().withMessage('Valid joining date is required')
+// const employeeValidation = [
+//   body('personalInfo.firstName').notEmpty().withMessage('First name is required'),
+//   body('personalInfo.lastName').notEmpty().withMessage('Last name is required'),
+//   body('personalInfo.email').isEmail().withMessage('Valid email is required'),
+//   body('personalInfo.phone').notEmpty().withMessage('Phone number is required'),
+//   body('workInfo.department').notEmpty().withMessage('Department is required'),
+//   body('workInfo.designation').notEmpty().withMessage('Designation is required'),
+//   body('workInfo.joiningDate').isISO8601().withMessage('Valid joining date is required'),
+//   body('status').optional().isIn(['Active', 'Inactive', 'Terminated'])
+// ];
+const employeeUpdateValidation = [
+  body('personalInfo.firstName').optional().notEmpty(),
+  body('personalInfo.lastName').optional().notEmpty(),
+  body('personalInfo.email').optional().isEmail(),
+  body('personalInfo.phone').optional().notEmpty(),
+  body('workInfo.department').optional().notEmpty(),
+  body('workInfo.designation').optional().notEmpty(),
+  body('workInfo.joiningDate').optional().isISO8601(),
+  body('status').optional().isIn(['Active', 'Inactive', 'Terminated'])
 ];
 
 // Leave validation rules
@@ -58,7 +69,7 @@ const holidayValidation = [
 
 module.exports = {
   validate,
-  employeeValidation,
+  employeeUpdateValidation,
   leaveValidation,
   attendanceValidation,
   announcementValidation,
