@@ -134,7 +134,7 @@ router.post('/', authMiddleware, roleAuth('admin', 'hr'), employeeValidation, va
 // Update employee
 router.put('/:id', authMiddleware, employeeValidation, validate, async (req, res) => {
   try {
-    const { personalInfo, workInfo } = req.body;
+    const { personalInfo, workInfo, status } = req.body;
     
     const employee = await Employee.findById(req.params.id);
     if (!employee) {
@@ -150,6 +150,9 @@ router.put('/:id', authMiddleware, employeeValidation, validate, async (req, res
     if (personalInfo) employee.personalInfo = { ...employee.personalInfo, ...personalInfo };
     if (workInfo && ['admin', 'hr'].includes(req.user.role)) {
       employee.workInfo = { ...employee.workInfo, ...workInfo };
+    }
+    if (status && ['admin', 'hr'].includes(req.user.role)) {
+      employee.status = status;
     }
 
     await employee.save();

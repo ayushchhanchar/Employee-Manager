@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { employeeAPI } from '../../services/api';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const statusOptions = ['Active', 'Inactive', 'Terminated'];
 
@@ -10,25 +10,34 @@ const EmployeeCard = ({ employee, onRefresh }) => {
 
   const handleStatusChange = async (e) => {
     const newStatus = e.target.value;
-    setStatus(newStatus);
+    setLoading(true);
+    
     try {
+      // Update the employee with the new status
       await employeeAPI.update(employee._id, {
         personalInfo: employee.personalInfo,
         workInfo: employee.workInfo,
         status: newStatus,
       });
+      
+      setStatus(newStatus);
       toast.success(`Status updated to ${newStatus}`);
       onRefresh();
     } catch (err) {
       toast.error('Failed to update status');
       console.error(err);
+      // Revert the status if update failed
+      setStatus(employee.status);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleTerminate = async () => {
     if (!window.confirm('Are you sure you want to terminate this employee?')) return;
+    
+    setLoading(true);
     try {
-      setLoading(true);
       await employeeAPI.remove(employee._id);
       toast.success('Employee terminated successfully');
       onRefresh();
@@ -37,6 +46,19 @@ const EmployeeCard = ({ employee, onRefresh }) => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Active':
+        return 'text-green-700 bg-green-100 border-green-200';
+      case 'Inactive':
+        return 'text-yellow-700 bg-yellow-100 border-yellow-200';
+      case 'Terminated':
+        return 'text-red-700 bg-red-100 border-red-200';
+      default:
+        return 'text-gray-700 bg-gray-100 border-gray-200';
     }
   };
 
@@ -63,16 +85,25 @@ const EmployeeCard = ({ employee, onRefresh }) => {
         <p><span className="font-medium">Department:</span> {employee.workInfo.department}</p>
         <p><span className="font-medium">Designation:</span> {employee.workInfo.designation}</p>
         <p><span className="font-medium">Joining:</span> {new Date(employee.workInfo.joiningDate).toLocaleDateString()}</p>
+        <p><span className="font-medium">Type:</span> {employee.workInfo.employmentType}</p>
+      </div>
+
+      {/* Status Display */}
+      <div className="mb-4">
+        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(status)}`}>
+          {status}
+        </span>
       </div>
 
       {/* Status & Actions */}
       <div className="flex justify-between items-center border-t pt-4 mt-2">
-        <div>
-          <label className="text-sm font-medium text-gray-700 mr-2">Status:</label>
+        <div className="flex-1 mr-4">
+          <label className="text-sm font-medium text-gray-700 block mb-1">Change Status:</label>
           <select
             value={status}
             onChange={handleStatusChange}
-            className="border border-gray-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            disabled={loading}
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {statusOptions.map((option) => (
               <option key={option} value={option}>
@@ -85,13 +116,13 @@ const EmployeeCard = ({ employee, onRefresh }) => {
         <button
           onClick={handleTerminate}
           disabled={loading}
-          className={`text-sm font-medium px-3 py-1 rounded transition-colors duration-200 ${
+          className={`text-sm font-medium px-4 py-2 rounded transition-colors duration-200 ${
             loading
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : 'bg-red-500 hover:bg-red-600 text-white'
           }`}
         >
-          {loading ? 'Removing...' : 'Remove'}
+          {loading ? 'Processing...' : 'Remove'}
         </button>
       </div>
     </div>
