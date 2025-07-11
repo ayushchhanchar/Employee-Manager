@@ -80,30 +80,30 @@ const Sidebar = () => {
 
   return (
     <div className={`
-      fixed left-0 top-0 h-full bg-white border-r border-gray-200 transition-all duration-300 z-50 shadow-lg
+      fixed left-0 top-0 h-full bg-gray-900 border-r border-gray-700 transition-all duration-300 z-50 shadow-2xl
       ${isCollapsed ? 'w-20' : 'w-72'}
     `}>
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-gray-200">
+      <div className="flex items-center justify-between p-6 border-b border-gray-700">
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
               <ChartBarIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">EMS Pro</h1>
-              <p className="text-xs text-gray-500">Employee Management</p>
+              <h1 className="text-xl font-bold text-white">EMS Pro</h1>
+              <p className="text-xs text-gray-400">Employee Management</p>
             </div>
           </div>
         )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
         >
           {isCollapsed ? (
-            <Bars3Icon className="w-5 h-5 text-gray-600" />
+            <Bars3Icon className="w-5 h-5 text-gray-400" />
           ) : (
-            <XMarkIcon className="w-5 h-5 text-gray-600" />
+            <XMarkIcon className="w-5 h-5 text-gray-400" />
           )}
         </button>
       </div>
@@ -122,14 +122,14 @@ const Sidebar = () => {
                   className={`
                     group flex items-center px-4 py-3 rounded-xl transition-all duration-200 relative
                     ${isActive 
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg' 
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/25' 
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                     }
                     ${isCollapsed ? 'justify-center' : 'justify-start'}
                   `}
                   title={isCollapsed ? item.name : ''}
                 >
-                  <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}`} />
+                  <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`} />
                   {!isCollapsed && (
                     <div className="ml-3 flex-1">
                       <span className="font-medium text-sm">{item.name}</span>
@@ -151,7 +151,7 @@ const Sidebar = () => {
       {/* Role Badge */}
       {!isCollapsed && (
         <div className="absolute bottom-6 left-4 right-4">
-          <div className="bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg p-4">
+          <div className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-lg p-4 border border-gray-600">
             <div className="flex items-center space-x-3">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white ${
                 userRole === 'admin' ? 'bg-red-500' : 
@@ -160,8 +160,8 @@ const Sidebar = () => {
                 {userRole === 'admin' ? 'A' : userRole === 'hr' ? 'H' : 'E'}
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 capitalize">{userRole}</p>
-                <p className="text-xs text-gray-500">
+                <p className="text-sm font-medium text-white capitalize">{userRole}</p>
+                <p className="text-xs text-gray-400">
                   {userRole === 'admin' ? 'System Administrator' : 
                    userRole === 'hr' ? 'Human Resources' : 'Employee'}
                 </p>

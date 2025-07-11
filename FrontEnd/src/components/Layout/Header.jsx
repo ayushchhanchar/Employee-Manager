@@ -123,7 +123,7 @@ const Header = () => {
 
   return (
     <header className={`
-      fixed top-0 right-0 h-16 bg-white/80 backdrop-blur-md border-b border-gray-200 z-40 transition-all duration-300
+      fixed top-0 right-0 h-16 bg-gray-800/80 backdrop-blur-md border-b border-gray-700 z-40 transition-all duration-300
       ${isCollapsed ? 'left-20' : 'left-72'}
     `}>
       <div className="flex items-center justify-between h-full px-6">
@@ -137,15 +137,15 @@ const Header = () => {
               placeholder="Search anything..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-80 pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              className="w-80 pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-100 placeholder-gray-400"
             />
           </div>
 
           {/* Time & Date */}
           <div className="hidden lg:block">
             <div className="text-right">
-              <p className="text-sm font-semibold text-gray-900">{getCurrentTime()}</p>
-              <p className="text-xs text-gray-500">{getCurrentDate()}</p>
+              <p className="text-sm font-semibold text-gray-100">{getCurrentTime()}</p>
+              <p className="text-xs text-gray-400">{getCurrentDate()}</p>
             </div>
           </div>
         </div>
@@ -153,13 +153,11 @@ const Header = () => {
         {/* Right Section */}
         <div className="flex items-center space-x-4">
           
-         
-
           {/* Notifications */}
           <div className="relative">
             <button
               onClick={toggleNotifications}
-              className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              className="relative p-2 text-gray-400 hover:text-gray-100 hover:bg-gray-700 rounded-lg transition-colors"
             >
               <BellIcon className="w-6 h-6" />
               {notifications.unreadCount > 0 && (
@@ -171,10 +169,10 @@ const Header = () => {
 
             {/* Notifications Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 max-h-96 overflow-y-auto">
-                <div className="px-4 py-3 border-b border-gray-200">
+              <div className="absolute right-0 mt-2 w-96 bg-gray-800 rounded-xl shadow-2xl border border-gray-700 py-2 z-50 max-h-96 overflow-y-auto">
+                <div className="px-4 py-3 border-b border-gray-700">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
+                    <h3 className="text-lg font-semibold text-gray-100">Notifications</h3>
                     {notifications.unreadCount > 0 && (
                       <span className="badge-info">{notifications.unreadCount} new</span>
                     )}
@@ -186,18 +184,18 @@ const Header = () => {
                       <div
                         key={notification._id}
                         onClick={() => markAsReadAndNavigate(notification)}
-                        className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-l-4 transition-colors ${
-                          !notification.isRead ? 'bg-blue-50 border-l-blue-500' : 'border-l-transparent'
+                        className={`px-4 py-3 hover:bg-gray-700 cursor-pointer border-l-4 transition-colors ${
+                          !notification.isRead ? 'bg-blue-900/20 border-l-blue-500' : 'border-l-transparent'
                         }`}
                       >
                         <div className="flex items-start space-x-3">
                           <div className={`w-2 h-2 rounded-full mt-2 ${
-                            !notification.isRead ? 'bg-blue-500' : 'bg-gray-300'
+                            !notification.isRead ? 'bg-blue-500' : 'bg-gray-500'
                           }`}></div>
                           <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-900">{notification.title}</p>
-                            <p className="text-xs text-gray-600 mt-1 line-clamp-2">{notification.message}</p>
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-sm font-medium text-gray-100">{notification.title}</p>
+                            <p className="text-xs text-gray-400 mt-1 line-clamp-2">{notification.message}</p>
+                            <p className="text-xs text-gray-500 mt-1">
                               {new Date(notification.createdAt).toLocaleDateString()}
                             </p>
                           </div>
@@ -206,18 +204,18 @@ const Header = () => {
                     ))
                   ) : (
                     <div className="px-4 py-8 text-center">
-                      <BellIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                      <p className="text-sm text-gray-500">No notifications</p>
+                      <BellIcon className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                      <p className="text-sm text-gray-400">No notifications</p>
                     </div>
                   )}
                 </div>
-                <div className="px-4 py-3 border-t border-gray-200">
+                <div className="px-4 py-3 border-t border-gray-700">
                   <button
                     onClick={() => {
                       navigate('/notifications');
                       setShowNotifications(false);
                     }}
-                    className="w-full text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    className="w-full text-sm text-blue-400 hover:text-blue-300 font-medium"
                   >
                     View all notifications
                   </button>
@@ -227,7 +225,7 @@ const Header = () => {
           </div>
 
           {/* Settings */}
-          <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+          <button className="p-2 text-gray-400 hover:text-gray-100 hover:bg-gray-700 rounded-lg transition-colors">
             <Cog6ToothIcon className="w-6 h-6" />
           </button>
 
@@ -235,7 +233,7 @@ const Header = () => {
           <div className="relative">
             <button
               onClick={toggleProfileMenu}
-              className="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded-lg transition-colors"
             >
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">
@@ -243,24 +241,24 @@ const Header = () => {
                 </span>
               </div>
               <div className="text-left hidden md:block">
-                <p className="text-sm font-medium text-gray-900">{auth.user?.username}</p>
-                <p className="text-xs text-gray-500 capitalize">{auth.user?.role}</p>
+                <p className="text-sm font-medium text-gray-100">{auth.user?.username}</p>
+                <p className="text-xs text-gray-400 capitalize">{auth.user?.role}</p>
               </div>
             </button>
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50">
-                <div className="px-4 py-3 border-b border-gray-200">
-                  <p className="text-sm font-medium text-gray-900">{auth.user?.username}</p>
-                  <p className="text-xs text-gray-500">{auth.user?.email}</p>
+              <div className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-xl shadow-2xl border border-gray-700 py-2 z-50">
+                <div className="px-4 py-3 border-b border-gray-700">
+                  <p className="text-sm font-medium text-gray-100">{auth.user?.username}</p>
+                  <p className="text-xs text-gray-400">{auth.user?.email}</p>
                 </div>
                 <button
                   onClick={() => {
                     navigate('/profile');
                     setShowProfileMenu(false);
                   }}
-                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-gray-100"
                 >
                   <UserCircleIcon className="w-4 h-4 mr-3" />
                   Profile Settings
@@ -270,15 +268,15 @@ const Header = () => {
                     navigate('/settings');
                     setShowProfileMenu(false);
                   }}
-                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-gray-100"
                 >
                   <Cog6ToothIcon className="w-4 h-4 mr-3" />
                   Preferences
                 </button>
-                <hr className="my-2" />
+                <hr className="my-2 border-gray-700" />
                 <button
                   onClick={handleLogout}
-                  className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  className="flex items-center w-full px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 hover:text-red-300"
                 >
                   <ArrowRightOnRectangleIcon className="w-4 h-4 mr-3" />
                   Sign Out

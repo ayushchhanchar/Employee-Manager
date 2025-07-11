@@ -162,7 +162,7 @@ const EmployeeDashboard = () => {
   ];
 
   return (
-    <div className="space-y-6 fade-in pl-9">
+    <div className="space-y-6 fade-in">
       {/* Welcome Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 rounded-2xl p-8 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
@@ -238,31 +238,31 @@ const EmployeeDashboard = () => {
         {/* Attendance Overview */}
         <div className="card-elevated">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Attendance Overview</h3>
+            <h3 className="text-lg font-semibold text-gray-100">Attendance Overview</h3>
             <ChartBarIcon className="w-5 h-5 text-gray-400" />
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Present Days</span>
-              <span className="font-semibold text-green-600">
+              <span className="text-sm text-gray-400">Present Days</span>
+              <span className="font-semibold text-green-400">
                 {dashboardData.attendance?.summary?.presentDays || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Absent Days</span>
-              <span className="font-semibold text-red-600">
+              <span className="text-sm text-gray-400">Absent Days</span>
+              <span className="font-semibold text-red-400">
                 {dashboardData.attendance?.summary?.absentDays || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Leave Days</span>
-              <span className="font-semibold text-yellow-600">
+              <span className="text-sm text-gray-400">Leave Days</span>
+              <span className="font-semibold text-yellow-400">
                 {dashboardData.attendance?.summary?.leaves || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Total Hours</span>
-              <span className="font-semibold text-blue-600">
+              <span className="text-sm text-gray-400">Total Hours</span>
+              <span className="font-semibold text-blue-400">
                 {dashboardData.attendance?.summary?.totalHours || 0}h
               </span>
             </div>
@@ -272,16 +272,16 @@ const EmployeeDashboard = () => {
         {/* Leave Balance */}
         <div className="card-elevated">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Leave Balance</h3>
+            <h3 className="text-lg font-semibold text-gray-100">Leave Balance</h3>
             <CalendarDaysIcon className="w-5 h-5 text-gray-400" />
           </div>
           {dashboardData.leaves?.leaveTypes && (
             <div className="space-y-4">
               {Object.entries(dashboardData.leaves.leaveTypes).map(([type, data]) => (
                 <div key={type} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">{type}</span>
+                  <span className="text-sm text-gray-400">{type}</span>
                   <div className="text-right">
-                    <span className="font-semibold text-gray-900">{data.remaining}</span>
+                    <span className="font-semibold text-gray-100">{data.remaining}</span>
                     <span className="text-xs text-gray-500 ml-1">/ {data.total}</span>
                   </div>
                 </div>
@@ -294,36 +294,36 @@ const EmployeeDashboard = () => {
       {/* Recent Activity */}
       <div className="card-elevated">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Today's Activity</h3>
+          <h3 className="text-lg font-semibold text-gray-100">Today's Activity</h3>
           <ClockIcon className="w-5 h-5 text-gray-400" />
         </div>
         <div className="space-y-4">
           {dashboardData.attendance?.today?.checkIn ? (
-            <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
+            <div className="flex items-center space-x-3 p-3 bg-green-900/20 rounded-lg border border-green-700/30">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <div>
-                <p className="text-sm font-medium text-green-800">Checked In</p>
-                <p className="text-xs text-green-600">
+                <p className="text-sm font-medium text-green-300">Checked In</p>
+                <p className="text-xs text-green-400">
                   {new Date(dashboardData.attendance.today.checkIn).toLocaleTimeString()}
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-              <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+            <div className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg border border-gray-700">
+              <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
               <div>
-                <p className="text-sm font-medium text-gray-600">Not Checked In</p>
+                <p className="text-sm font-medium text-gray-400">Not Checked In</p>
                 <p className="text-xs text-gray-500">Click check-in to start your day</p>
               </div>
             </div>
           )}
           
           {dashboardData.attendance?.today?.checkOut && (
-            <div className="flex items-center space-x-3 p-3 bg-red-50 rounded-lg">
+            <div className="flex items-center space-x-3 p-3 bg-red-900/20 rounded-lg border border-red-700/30">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
               <div>
-                <p className="text-sm font-medium text-red-800">Checked Out</p>
-                <p className="text-xs text-red-600">
+                <p className="text-sm font-medium text-red-300">Checked Out</p>
+                <p className="text-xs text-red-400">
                   {new Date(dashboardData.attendance.today.checkOut).toLocaleTimeString()}
                 </p>
               </div>

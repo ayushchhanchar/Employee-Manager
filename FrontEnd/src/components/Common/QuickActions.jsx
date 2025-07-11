@@ -11,10 +11,10 @@ const QuickActions = ({ actions = [] }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-      <div className="p-6 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
-        <p className="text-sm text-gray-500 mt-1">Frequently used actions</p>
+    <div className="bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+      <div className="p-6 border-b border-gray-700">
+        <h3 className="text-lg font-semibold text-gray-100">Quick Actions</h3>
+        <p className="text-sm text-gray-400 mt-1">Frequently used actions</p>
       </div>
       <div className="p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -68,16 +68,15 @@ const Employees = () => {
 
   return (
     <Layout>
-      <Sidebar />
-      <div className="px-6 py-6 min-h-screen bg-gray-50">
+      <div className="px-6 py-6 min-h-screen bg-gray-900">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 tracking-tight">👩‍💼 Employee Management</h2>
-            <p className="text-gray-600 mt-1">Manage your organization's workforce</p>
+            <h2 className="text-3xl font-bold text-gray-100 tracking-tight">👩‍💼 Employee Management</h2>
+            <p className="text-gray-400 mt-1">Manage your organization's workforce</p>
           </div>
           <button
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition duration-200 shadow-lg"
+            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition duration-200 shadow-lg"
             onClick={openCreateForm}
           >
             <FaPlus className="text-sm" /> Add Employee
@@ -86,35 +85,35 @@ const Employees = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-4 rounded-lg shadow border">
-            <h3 className="text-sm font-medium text-gray-500">Total Employees</h3>
-            <p className="text-2xl font-bold text-gray-900">{employees.length}</p>
+          <div className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+            <h3 className="text-sm font-medium text-gray-400">Total Employees</h3>
+            <p className="text-2xl font-bold text-gray-100">{employees.length}</p>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow border">
-            <h3 className="text-sm font-medium text-gray-500">Active</h3>
-            <p className="text-2xl font-bold text-green-600">
+          <div className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+            <h3 className="text-sm font-medium text-gray-400">Active</h3>
+            <p className="text-2xl font-bold text-green-400">
               {employees.filter(emp => emp.status === 'Active').length}
             </p>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow border">
-            <h3 className="text-sm font-medium text-gray-500">Inactive</h3>
-            <p className="text-2xl font-bold text-yellow-600">
+          <div className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+            <h3 className="text-sm font-medium text-gray-400">Inactive</h3>
+            <p className="text-2xl font-bold text-yellow-400">
               {employees.filter(emp => emp.status === 'Inactive').length}
             </p>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow border">
-            <h3 className="text-sm font-medium text-gray-500">Terminated</h3>
-            <p className="text-2xl font-bold text-red-600">
+          <div className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+            <h3 className="text-sm font-medium text-gray-400">Terminated</h3>
+            <p className="text-2xl font-bold text-red-400">
               {employees.filter(emp => emp.status === 'Terminated').length}
             </p>
           </div>
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-white p-6 rounded-lg shadow border mb-6">
+        <div className="bg-gray-800 p-6 rounded-lg shadow border border-gray-700 mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <FaFilter className="text-gray-500" />
-            <h3 className="text-lg font-medium text-gray-900">Filters</h3>
+            <FaFilter className="text-gray-400" />
+            <h3 className="text-lg font-medium text-gray-100">Filters</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Search Input */}
@@ -122,7 +121,7 @@ const Employees = () => {
               <input
                 type="text"
                 placeholder="Search name or email"
-                className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full border border-gray-600 rounded-md pl-10 pr-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-700 text-gray-100 placeholder-gray-400"
                 value={filters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
               />
@@ -131,7 +130,7 @@ const Employees = () => {
 
             {/* Department Dropdown */}
             <select
-              className="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full border border-gray-600 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-700 text-gray-100"
               value={filters.department}
               onChange={(e) => handleFilterChange('department', e.target.value)}
             >
@@ -147,7 +146,7 @@ const Employees = () => {
 
             {/* Status Dropdown */}
             <select
-              className="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full border border-gray-600 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-700 text-gray-100"
               value={filters.status}
               onChange={(e) => handleFilterChange('status', e.target.value)}
             >
@@ -160,7 +159,7 @@ const Employees = () => {
             {/* Clear Filters */}
             <button
               onClick={clearFilters}
-              className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md px-3 py-2 transition"
+              className="w-full bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-md px-3 py-2 transition"
             >
               Clear Filters
             </button>
@@ -170,8 +169,8 @@ const Employees = () => {
         {/* Employee Cards */}
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            <span className="ml-3 text-gray-600">Loading employees...</span>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <span className="ml-3 text-gray-400">Loading employees...</span>
           </div>
         ) : employees.length > 0 ? (
           <>
@@ -192,17 +191,17 @@ const Employees = () => {
                 <button
                   onClick={() => handleFilterChange('page', pagination.current - 1)}
                   disabled={!pagination.hasPrev}
-                  className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                  className="px-4 py-2 border border-gray-600 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 text-gray-200"
                 >
                   Previous
                 </button>
-                <span className="text-gray-600">
+                <span className="text-gray-400">
                   Page {pagination.current} of {pagination.total}
                 </span>
                 <button
                   onClick={() => handleFilterChange('page', pagination.current + 1)}
                   disabled={!pagination.hasNext}
-                  className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                  className="px-4 py-2 border border-gray-600 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 text-gray-200"
                 >
                   Next
                 </button>
@@ -211,9 +210,9 @@ const Employees = () => {
           </>
         ) : (
           <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">👥</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No employees found</h3>
-            <p className="text-gray-500 mb-6">
+            <div className="text-gray-500 text-6xl mb-4">👥</div>
+            <h3 className="text-lg font-medium text-gray-100 mb-2">No employees found</h3>
+            <p className="text-gray-400 mb-6">
               {Object.values(filters).some(f => f) 
                 ? 'Try adjusting your filters or search terms'
                 : 'Get started by adding your first employee'
@@ -221,7 +220,7 @@ const Employees = () => {
             </p>
             <button
               onClick={openCreateForm}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg"
             >
               Add First Employee
             </button>
@@ -231,13 +230,13 @@ const Employees = () => {
         {/* Modal Form */}
         {showForm && (
           <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
-                <h3 className="text-xl font-semibold">
+            <div className="bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
+              <div className="sticky top-0 bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
+                <h3 className="text-xl font-semibold text-gray-100">
                   {selectedEmployee ? 'Edit Employee' : 'Add New Employee'}
                 </h3>
                 <button
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
+                  className="text-gray-400 hover:text-gray-200 text-2xl"
                   onClick={closeForm}
                 >
                   ×

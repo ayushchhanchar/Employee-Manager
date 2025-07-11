@@ -8,14 +8,14 @@ const Layout = ({ children }) => {
   const isCollapsed = useRecoilValue(CollapsedAtom);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       <Sidebar />
       <Header />
       <main className={`
-        pt-16 transition-all duration-300
+        pt-16 transition-all duration-300 bg-gray-900
         ${isCollapsed ? 'ml-16' : 'ml-64'}
       `}>
-        <div className="p-6">
+        <div className="p-6 bg-gray-900 min-h-screen">
           {children}
         </div>
       </main>

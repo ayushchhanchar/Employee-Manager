@@ -10,24 +10,24 @@ const StatsCard = ({
   subtitle 
 }) => {
   const colorClasses = {
-    blue: 'bg-blue-50 text-blue-600 border-blue-100',
-    green: 'bg-green-50 text-green-600 border-green-100',
-    yellow: 'bg-yellow-50 text-yellow-600 border-yellow-100',
-    red: 'bg-red-50 text-red-600 border-red-100',
-    purple: 'bg-purple-50 text-purple-600 border-purple-100'
+    blue: 'bg-blue-900/20 text-blue-400 border-blue-700/30',
+    green: 'bg-green-900/20 text-green-400 border-green-700/30',
+    yellow: 'bg-yellow-900/20 text-yellow-400 border-yellow-700/30',
+    red: 'bg-red-900/20 text-red-400 border-red-700/30',
+    purple: 'bg-purple-900/20 text-purple-400 border-purple-700/30'
   };
 
   const changeColorClasses = {
-    increase: 'text-green-600 bg-green-100',
-    decrease: 'text-red-600 bg-red-100'
+    increase: 'text-green-400 bg-green-900/20',
+    decrease: 'text-red-400 bg-red-900/20'
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <div className="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-500/10">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mb-1">{value}</p>
+          <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
+          <p className="text-3xl font-bold text-gray-100 mb-1">{value}</p>
           {subtitle && (
             <p className="text-xs text-gray-500 mb-2">{subtitle}</p>
           )}
