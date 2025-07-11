@@ -14,37 +14,54 @@ class NotificationService {
   }
 
   // Get user notifications
-  static async getUserNotifications(userId, page = 1, limit = 20) {
-    try {
-      const skip = (page - 1) * limit;
-      
-      const notifications = await Notification.find({ recipient: userId })
-        .populate('sender', 'username email')
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
+ // Get user notifications with filters
+static async getUserNotifications(userId, page = 1, limit = 20, filters = {}) {
+  try {
+    const skip = (page - 1) * limit;
 
-      const total = await Notification.countDocuments({ recipient: userId });
-      const unreadCount = await Notification.countDocuments({ 
-        recipient: userId, 
-        isRead: false 
-      });
+    // Build query with filters
+    const query = { recipient: userId };
 
-      return {
-        notifications,
-        pagination: {
-          current: page,
-          total: Math.ceil(total / limit),
-          hasNext: skip + notifications.length < total,
-          hasPrev: page > 1
-        },
-        unreadCount
-      };
-    } catch (error) {
-      console.error('Error fetching notifications:', error);
-      throw error;
+    if (filters.unreadOnly === true || filters.unreadOnly === 'true') {
+      query.isRead = false;
     }
+
+    if (filters.type) {
+      query.type = filters.type;
+    }
+
+    if (filters.priority) {
+      query.priority = filters.priority;
+    }
+
+    const notifications = await Notification.find(query)
+      .populate('sender', 'username email')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Notification.countDocuments(query);
+    const unreadCount = await Notification.countDocuments({
+      recipient: userId,
+      isRead: false,
+    });
+
+    return {
+      notifications,
+      pagination: {
+        current: page,
+        total: Math.ceil(total / limit),
+        hasNext: skip + notifications.length < total,
+        hasPrev: page > 1,
+      },
+      unreadCount,
+    };
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    throw error;
   }
+}
+
 
   // Mark notification as read
   static async markAsRead(notificationId, userId) {

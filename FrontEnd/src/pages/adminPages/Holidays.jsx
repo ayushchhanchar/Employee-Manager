@@ -217,13 +217,13 @@ const Holidays = () => {
                   {(user?.role === 'admin' || user?.role === 'hr') && (
                     <div className="flex gap-2">
                       <button
-                        className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                        className="bg-blue-600 text-white px-3 py-1 rounded-md  hover:underline text-sm"
                         onClick={() => editHoliday(holiday)}
                       >
                         Edit
                       </button>
                       <button
-                        className="text-red-400 hover:underline text-sm"
+                        className="bg-red-400 text-white px-3 py-1 rounded-md hover:underline text-sm"
                         onClick={() => deleteHoliday(holiday._id)}
                       >
                         Delete

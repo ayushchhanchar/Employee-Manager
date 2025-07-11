@@ -121,28 +121,28 @@ const ProfilePage = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* User Information */}
-          <div className="bg-white p-6 border border-gray-200 rounded-lg shadow">
+          <div className="bg-gray-800 p-6  rounded-lg shadow">
             <h3 className="text-lg font-semibold mb-4">User Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+              <div className=''>
+                <label className="block text-sm font-medium text-gray-200 mb-1">Username</label>
                 <input
                   type="text"
                   name="username"
                   value={userProfile.username}
                   onChange={handleUserChange}
-                  className="input"
+                  className="input bg-gray-600"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-gray-200 mb-1">Email</label>
                 <input
                   type="email"
                   name="email"
                   value={userProfile.email}
                   onChange={handleUserChange}
-                  className="input"
+                  className="input  bg-gray-600"
                   required
                 />
               </div>
@@ -152,7 +152,7 @@ const ProfilePage = () => {
                   type="text"
                   value={userProfile.role}
                   disabled
-                  className="input bg-gray-100 cursor-not-allowed"
+                  className="input  bg-gray-600 cursor-not-allowed"
                 />
               </div>
             </div>
@@ -160,7 +160,7 @@ const ProfilePage = () => {
 
           {/* Employee Information (if user is an employee) */}
           {employeeProfile && (
-            <div className="bg-white p-6 border border-gray-200 rounded-lg shadow">
+            <div className="bg-gray-800 p-6 border border-gray-200 rounded-lg shadow">
               <h3 className="text-lg font-semibold mb-4">Employee Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -251,7 +251,7 @@ const ProfilePage = () => {
           <button
             type="submit"
             disabled={updating || !editing}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md disabled:opacity-50"
+            className="bg-blue-700 hover:bg-blue-700 text-white px-6 py-2 rounded-md disabled:opacity-50"
           >
             {updating ? 'Updating...' : 'Update Profile'}
           </button>

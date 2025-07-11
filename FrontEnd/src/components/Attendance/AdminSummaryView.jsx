@@ -17,6 +17,7 @@ const AdminSummaryView = () => {
       setAttendance((prev) => ({
         ...prev,
         summary: res.data.data.summary,
+        presentEmployees: res.data.data.presentEmployees,
         loading: false,
         error: null,
       }));
@@ -25,6 +26,7 @@ const AdminSummaryView = () => {
       setAttendance((prev) => ({
         ...prev,
         summary: null,
+        presentEmployees: [],
         loading: false,
         error: 'Failed to load summary',
       }));
@@ -37,6 +39,7 @@ const AdminSummaryView = () => {
 
   const summary = attendance.summary;
   const loading = attendance.loading;
+  const presentEmployees = attendance.presentEmployees || [];
 
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -69,10 +72,7 @@ const AdminSummaryView = () => {
           onChange={(e) => setYear(parseInt(e.target.value))}
           className="input w-28 bg-gray-800 border border-gray-700"
         />
-        <button
-          onClick={fetchSummary}
-          className="btn-primary"
-        >
+        <button onClick={fetchSummary} className="btn-primary">
           Refresh
         </button>
       </div>
@@ -81,16 +81,51 @@ const AdminSummaryView = () => {
       {loading ? (
         <p className="text-gray-400">Loading summary...</p>
       ) : summary ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <SummaryCard title="Present Days" value={summary.presentDays} color="green" />
-          <SummaryCard title="Absent Days" value={summary.absentDays} color="red" />
-          <SummaryCard title="Leaves" value={summary.leaves} color="yellow" />
-          <SummaryCard title="Working Days" value={summary.totalDays} color="blue" />
-          <SummaryCard title="Half Days" value={summary.halfDays} color="orange" />
-          <SummaryCard title="Late Days" value={summary.lateDays} color="pink" />
-          <SummaryCard title="Holidays" value={summary.holidays} color="gray" />
-          <SummaryCard title="Total Hours" value={`${summary.totalHours} hrs`} color="indigo" />
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <SummaryCard title="Present Days" value={summary.presentDays} color="green" />
+            <SummaryCard title="Absent Days" value={summary.absentDays} color="red" />
+            <SummaryCard title="Leaves" value={summary.leaves} color="yellow" />
+            <SummaryCard title="Working Days" value={summary.totalDays} color="blue" />
+            <SummaryCard title="Half Days" value={summary.halfDays} color="orange" />
+            <SummaryCard title="Late Days" value={summary.lateDays} color="pink" />
+            <SummaryCard title="Holidays" value={summary.holidays} color="gray" />
+            <SummaryCard title="Total Hours" value={`${summary.totalHours} hrs`} color="indigo" />
+          </div>
+
+          {/* Present Employee List */}
+          <div className="bg-gray-800 border border-gray-700 rounded p-4">
+            <h2 className="text-lg font-semibold mb-4">Present Employees</h2>
+            {presentEmployees.length === 0 ? (
+              <p className="text-gray-400">No employees marked as present this month.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-gray-300 border-b border-gray-600">
+                      <th className="py-2 px-4">Name</th>
+                      <th className="py-2 px-4">Check-In</th>
+                      <th className="py-2 px-4">Check-Out</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {presentEmployees.map((emp) => (
+                      <tr key={emp._id} className="border-b border-gray-700 hover:bg-gray-700/50">
+                        <td className="py-2 px-4">{emp.name}</td>
+                        <td className="py-2 px-4">
+                          {emp.checkIn ? new Date(emp.checkIn).toLocaleTimeString() : '—'}
+                        </td>
+                        <td className="py-2 px-4">
+                          {emp.checkOut ? new Date(emp.checkOut).toLocaleTimeString() : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </>
       ) : (
         <p className="text-gray-500">No attendance summary available.</p>
       )}
@@ -98,7 +133,6 @@ const AdminSummaryView = () => {
   );
 };
 
-// Summary Card Component
 const SummaryCard = ({ title, value, color }) => {
   const colorMap = {
     green: 'bg-green-900/50 text-green-300 border border-green-700',

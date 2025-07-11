@@ -203,12 +203,13 @@ router.post('/mark', authMiddleware, roleAuth('admin', 'hr'), attendanceValidati
 });
 
 // Get attendance summary
+// Get attendance summary
 router.get('/summary', authMiddleware, async (req, res) => {
   try {
     const { month, year, employeeId } = req.query;
-    
+
     let filter = {};
-    
+
     // Role-based filtering
     if (req.user.role === 'user') {
       const employee = await Employee.findOne({ user: req.user._id });
@@ -223,14 +224,14 @@ router.get('/summary', authMiddleware, async (req, res) => {
     // Date filter
     const currentMonth = month ? parseInt(month) - 1 : new Date().getMonth();
     const currentYear = year ? parseInt(year) : new Date().getFullYear();
-    
+
     const startDate = new Date(currentYear, currentMonth, 1);
     const endDate = new Date(currentYear, currentMonth + 1, 0);
-    
+
     filter.date = { $gte: startDate, $lte: endDate };
 
     const attendance = await Attendance.find(filter);
-    
+
     // Calculate summary
     const summary = {
       totalDays: endDate.getDate(),
@@ -243,17 +244,34 @@ router.get('/summary', authMiddleware, async (req, res) => {
       totalHours: attendance.reduce((sum, a) => sum + (a.totalHours || 0), 0)
     };
 
+    // Fetch present employees with check-in/out
+    const presentEmployees = await Attendance.find({
+      ...filter,
+      status: 'Present'
+    })
+    .populate('employee', 'personalInfo.firstName personalInfo.lastName')
+    .select('checkIn checkOut employee');
+
+    const presentEmployeeList = presentEmployees.map(record => ({
+      _id: record._id,
+      name: `${record.employee.personalInfo.firstName} ${record.employee.personalInfo.lastName}`,
+      checkIn: record.checkIn,
+      checkOut: record.checkOut,
+    }));
+
     res.json({
       success: true,
       data: {
         summary,
-        attendance
+        attendance,
+        presentEmployees: presentEmployeeList,
       }
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
 
 // Get today's attendance status
 router.get('/today', authMiddleware, async (req, res) => {

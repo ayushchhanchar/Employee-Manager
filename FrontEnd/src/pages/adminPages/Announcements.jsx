@@ -196,16 +196,16 @@ const Announcements = () => {
                   {ann.readBy?.some(r => r.user === user?._id) ? (
                     <span className="text-green-600 dark:text-green-400 text-sm font-medium">✓ Read</span>
                   ) : (
-                    <button onClick={() => markAsRead(ann._id)} className="text-blue-600 dark:text-blue-400 text-sm hover:underline">
+                    <button onClick={() => markAsRead(ann._id)} className="bg-blue-600 text-white px-3 py-1 rounded-md  text-sm hover:underline">
                       Mark as Read
                     </button>
                   )}
                   {(user?.role === 'admin' || user?.role === 'hr') && (
                     <>
-                      <button className="text-yellow-600 dark:text-yellow-400 text-sm hover:underline" onClick={() => editAnnouncement(ann)}>
+                      <button className="bg-yellow-600 text-white px-3 py-1 rounded-md  text-sm hover:underline" onClick={() => editAnnouncement(ann)}>
                         Edit
                       </button>
-                      <button className="text-red-500 dark:text-red-400 text-sm hover:underline" onClick={() => deleteAnnouncement(ann._id)}>
+                      <button className="bg-red-600 text-white px-3 py-1 rounded-md  text-sm hover:underline" onClick={() => deleteAnnouncement(ann._id)}>
                         Delete
                       </button>
                     </>
@@ -218,104 +218,150 @@ const Announcements = () => {
 
         {/* Create/Edit Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-gray-800 text-gray-100 rounded-lg p-6 w-full max-w-2xl">
-              <h3 className="text-lg font-semibold mb-4">
-                {editingAnnouncement ? 'Edit Announcement' : 'Create Announcement'}
-              </h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Title"
-                  value={form.title}
-                  onChange={handleFormChange}
-                  className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
-                  required
-                />
-                <textarea
-                  name="content"
-                  placeholder="Content"
-                  value={form.content}
-                  onChange={handleFormChange}
-                  className="w-full border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2 h-32"
-                  required
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <select
-                    name="type"
-                    value={form.type}
-                    onChange={handleFormChange}
-                    className="border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
-                  >
-                    <option value="General">General</option>
-                    <option value="Important">Important</option>
-                    <option value="Urgent">Urgent</option>
-                    <option value="Holiday">Holiday</option>
-                    <option value="Event">Event</option>
-                  </select>
-                  <select
-                    name="priority"
-                    value={form.priority}
-                    onChange={handleFormChange}
-                    className="borderborder-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
-                  >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                  </select>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <select
-                    name="targetAudience"
-                    value={form.targetAudience}
-                    onChange={handleFormChange}
-                    className="border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
-                  >
-                    <option value="All">All</option>
-                    <option value="Employees">Employees</option>
-                    <option value="Managers">Managers</option>
-                    <option value="HR">HR</option>
-                    <option value="Department">Department</option>
-                  </select>
-                  {form.targetAudience === 'Department' && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-gray-800 text-gray-100 rounded-lg p-6 w-full max-w-2xl">
+                <h3 className="text-lg font-semibold mb-4">
+                  {editingAnnouncement ? 'Edit Announcement' : 'Create Announcement'}
+                </h3>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  
+                  {/* Title */}
+                  <div>
+                    <label htmlFor="title" className="block text-sm mb-1">Title</label>
                     <input
                       type="text"
-                      name="department"
-                      placeholder="Department Name"
-                      value={form.department}
+                      id="title"
+                      name="title"
+                      placeholder="Title"
+                      value={form.title}
                       onChange={handleFormChange}
-                      className="border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
+                      className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
+                      required
                     />
-                  )}
-                </div>
-                <input
-                  type="date"
-                  name="expiryDate"
-                  value={form.expiryDate}
-                  onChange={handleFormChange}
-                  className="w-full border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
-                />
-                <div className="flex gap-4">
-                  <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    {editingAnnouncement ? 'Update' : 'Create'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowForm(false);
-                      setEditingAnnouncement(null);
-                      resetForm();
-                    }}
-                    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+                  </div>
+
+                  {/* Content */}
+                  <div>
+                    <label htmlFor="content" className="block text-sm mb-1">Content</label>
+                    <textarea
+                      id="content"
+                      name="content"
+                      placeholder="Content"
+                      value={form.content}
+                      onChange={handleFormChange}
+                      className="w-full border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2 h-32"
+                      required
+                    />
+                  </div>
+
+                  {/* Type & Priority */}
+                  <div className="grid grid-cols-2  gap-4">
+                    <div>
+                      <label htmlFor="type" className="block text-sm mb-1">Type</label>
+                      <select
+                        id="type"
+                        name="type"
+                        value={form.type}
+                        onChange={handleFormChange}
+                        className="border border-gray-600 bg-gray-700 w-full text-white rounded-lg px-3 py-2"
+                      >
+                        <option value="General">General</option>
+                        <option value="Important">Important</option>
+                        <option value="Urgent">Urgent</option>
+                        <option value="Holiday">Holiday</option>
+                        <option value="Event">Event</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="priority" className="block text-sm mb-1">Priority</label>
+                      <select
+                        id="priority"
+                        name="priority"
+                        value={form.priority}
+                        onChange={handleFormChange}
+                        className="border border-gray-600 bg-gray-700 w-full dark:text-white rounded-lg px-3 py-2"
+                      >
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Target Audience & Department */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="targetAudience" className="block text-sm mb-1">Target Audience</label>
+                      <select
+                        id="targetAudience"
+                        name="targetAudience"
+                        value={form.targetAudience}
+                        onChange={handleFormChange}
+                        className="border border-gray-600 bg-gray-700 w-full dark:text-white rounded-lg px-3 py-2"
+                      >
+                        <option value="All">All</option>
+                        <option value="Employees">Employees</option>
+                        <option value="Managers">Managers</option>
+                        <option value="HR">HR</option>
+                        <option value="Department">Department</option>
+                      </select>
+                    </div>
+
+                    {form.targetAudience === 'Department' && (
+                      <div>
+                        <label htmlFor="department" className="block text-sm mb-1">Department Name</label>
+                        <input
+                          type="text"
+                          id="department"
+                          name="department"
+                          placeholder="Department Name"
+                          value={form.department}
+                          onChange={handleFormChange}
+                          className="border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Expiry Date */}
+                  <div>
+                    <label htmlFor="expiryDate" className="block text-sm mb-1">Expiry Date</label>
+                    <input
+                      type="date"
+                      id="expiryDate"
+                      name="expiryDate"
+                      value={form.expiryDate}
+                      onChange={handleFormChange}
+                      className="w-full border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
+                    />
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                    >
+                      {editingAnnouncement ? 'Update' : 'Create'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowForm(false);
+                        setEditingAnnouncement(null);
+                        resetForm();
+                      }}
+                      className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
       </div>
     </Layout>
   );

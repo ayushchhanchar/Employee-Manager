@@ -75,7 +75,7 @@ const NotificationPage = () => {
   return (
     <Layout>
       <Sidebar />
-      <div className="p-6  dark:bg-gray-900 min-h-screen  dark:text-gray-100">
+      <div className="p-6  bg-gray-900 min-h-screen  text-gray-100">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-semibold">Notifications</h1>
           <button
@@ -92,7 +92,7 @@ const NotificationPage = () => {
             name="type"
             value={filters.type}
             onChange={handleFilterChange}
-            className="border  dark:border-gray-600 bg-gray-800 dark:text-white rounded p-2"
+            className="border border-gray-600 bg-gray-800 text-white rounded p-2"
           >
             <option value="">All Types</option>
             <option value="Leave">Leave</option>
@@ -105,7 +105,7 @@ const NotificationPage = () => {
             name="priority"
             value={filters.priority}
             onChange={handleFilterChange}
-            className="border  dark:border-gray-600 bg-gray-800 dark:text-white rounded p-2"
+            className="border  border-gray-600 bg-gray-800 text-white rounded p-2"
           >
             <option value="">All Priorities</option>
             <option value="Low">Low</option>
@@ -113,7 +113,7 @@ const NotificationPage = () => {
             <option value="High">High</option>
           </select>
 
-          <label className="flex items-center space-x-2 text-sm dark:text-white">
+          <label className="flex items-center space-x-2 text-sm text-white">
             <input
               type="checkbox"
               name="unreadOnly"
@@ -126,7 +126,7 @@ const NotificationPage = () => {
         </div>
 
         {/* Notification List */}
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           {loading ? (
             <p className=" text-gray-400">Loading notifications...</p>
           ) : notifications.notifications.length === 0 ? (
@@ -137,14 +137,14 @@ const NotificationPage = () => {
                 key={n._id}
                 className={`border p-4 rounded shadow-sm ${
                   !n.isRead
-                    ? ' dark:bg-blue-900/30'
-                    : ' dark:bg-gray-800'
-                } border-gray-200 dark:border-gray-700`}
+                    ? ' bg-blue-900/30 '
+                    : ' bg-gray-800'
+                }  border-gray-700`}
               >
                 <div className="flex justify-between">
                   <div>
                     <h2 className="text-lg font-semibold">{n.title}</h2>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">{n.message}</p>
+                    <p className="text-sm text-gray-300">{n.message}</p>
                     <p className="text-xs text-gray-500 mt-1">
                       {new Date(n.createdAt).toLocaleString()}
                     </p>
@@ -157,14 +157,14 @@ const NotificationPage = () => {
                     {!n.isRead && (
                       <button
                         onClick={() => handleMarkAsRead(n._id)}
-                        className="text-xs text-blue-600 hover:underline"
+                        className="text-xs bg-blue-600 px-3 py-1 rounded-md text-white hover:underline"
                       >
                         Mark as Read
                       </button>
                     )}
                     <button
                       onClick={() => handleDelete(n._id)}
-                      className="text-xs text-red-500 hover:underline"
+                      className="text-xs bg-red-500 px-3 py-1 rounded-md text-white hover:underline"
                     >
                       Delete
                     </button>
@@ -182,8 +182,8 @@ const NotificationPage = () => {
             disabled={!pagination.hasPrev}
             className={`px-4 py-2 border rounded ${
               pagination.hasPrev
-                ? ' dark:hover:bg-gray-700'
-                : ' dark:text-gray-500 cursor-not-allowed'
+                ? ' hover:bg-gray-700'
+                : ' text-gray-500 cursor-not-allowed'
             }`}
           >
             Previous
@@ -196,8 +196,8 @@ const NotificationPage = () => {
             disabled={!pagination.hasNext}
             className={`px-4 py-2 border rounded ${
               pagination.hasNext
-                ? ' dark:hover:bg-gray-700'
-                : ' dark:text-gray-500 cursor-not-allowed'
+                ? ' hover:bg-gray-700'
+                : ' text-gray-500 cursor-not-allowed'
             }`}
           >
             Next
