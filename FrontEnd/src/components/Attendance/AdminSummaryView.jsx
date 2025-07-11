@@ -44,18 +44,18 @@ const AdminSummaryView = () => {
   ];
 
   return (
-    <div>
+    <div className="text-gray-100">
       {/* Month-Year Selector */}
       <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
         <div className="flex items-center gap-2">
-          <FaCalendarAlt className="text-gray-600" />
+          <FaCalendarAlt className="text-gray-300" />
           <select
-            className="border border-gray-300 rounded px-3 py-2 shadow-sm focus:ring-indigo-500 focus:outline-none"
+            className="input w-auto bg-gray-800 border border-gray-700"
             value={month}
             onChange={(e) => setMonth(parseInt(e.target.value))}
           >
             {months.map((m, i) => (
-              <option key={i + 1} value={i + 1}>
+              <option key={i + 1} value={i + 1} className="bg-gray-800 text-gray-100">
                 {m}
               </option>
             ))}
@@ -67,11 +67,11 @@ const AdminSummaryView = () => {
           max="2099"
           value={year}
           onChange={(e) => setYear(parseInt(e.target.value))}
-          className="border border-gray-300 rounded px-3 py-2 shadow-sm focus:ring-indigo-500 focus:outline-none"
+          className="input w-28 bg-gray-800 border border-gray-700"
         />
         <button
           onClick={fetchSummary}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded transition"
+          className="btn-primary"
         >
           Refresh
         </button>
@@ -79,7 +79,7 @@ const AdminSummaryView = () => {
 
       {/* Summary Cards */}
       {loading ? (
-        <p className="text-gray-600">Loading summary...</p>
+        <p className="text-gray-400">Loading summary...</p>
       ) : summary ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <SummaryCard title="Present Days" value={summary.presentDays} color="green" />
@@ -101,18 +101,18 @@ const AdminSummaryView = () => {
 // Summary Card Component
 const SummaryCard = ({ title, value, color }) => {
   const colorMap = {
-    green: 'bg-green-100 text-green-800',
-    red: 'bg-red-100 text-red-800',
-    yellow: 'bg-yellow-100 text-yellow-800',
-    blue: 'bg-blue-100 text-blue-800',
-    orange: 'bg-orange-100 text-orange-800',
-    pink: 'bg-pink-100 text-pink-800',
-    gray: 'bg-gray-100 text-gray-800',
-    indigo: 'bg-indigo-100 text-indigo-800',
+    green: 'bg-green-900/50 text-green-300 border border-green-700',
+    red: 'bg-red-900/50 text-red-300 border border-red-700',
+    yellow: 'bg-yellow-900/50 text-yellow-300 border border-yellow-700',
+    blue: 'bg-blue-900/50 text-blue-300 border border-blue-700',
+    orange: 'bg-orange-900/50 text-orange-300 border border-orange-700',
+    pink: 'bg-pink-900/50 text-pink-300 border border-pink-700',
+    gray: 'bg-gray-700/50 text-gray-300 border border-gray-600',
+    indigo: 'bg-indigo-900/50 text-indigo-300 border border-indigo-700',
   };
 
   return (
-    <div className={`p-4 rounded-md shadow ${colorMap[color]}`}>
+    <div className={`card ${colorMap[color]} hover:shadow-xl transition-all`}>
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="text-2xl font-bold mt-1">{value}</p>
     </div>

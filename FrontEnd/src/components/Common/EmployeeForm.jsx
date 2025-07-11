@@ -113,7 +113,7 @@ const EmployeeForm = ({ employee, onClose, onRefresh }) => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded shadow w-full max-w-2xl relative">
+    <div className="bg-gray-800 p-6 h-full rounded shadow w-full max-w-4xl relative">
       <h3 className="text-2xl font-semibold mb-6 text-center text-gray-100">
         {isEdit ? 'Edit Employee' : 'Add New Employee'}
       </h3>

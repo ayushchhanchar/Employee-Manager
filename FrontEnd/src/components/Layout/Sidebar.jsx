@@ -80,11 +80,11 @@ const Sidebar = () => {
 
   return (
     <div className={`
-      fixed left-0 top-0 h-full bg-gray-900 border-r border-gray-700 transition-all duration-300 z-50 shadow-2xl
+      fixed left-0 top-0 h-full bg-gray-800/80 border-r border-gray-700 transition-all duration-300 z-50 shadow-2xl
       ${isCollapsed ? 'w-20' : 'w-72'}
     `}>
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-gray-700">
+      <div className="flex items-center justify-between p-5 ">
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">

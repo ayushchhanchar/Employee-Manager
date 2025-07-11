@@ -12,8 +12,8 @@ const Attendance = () => {
   return (
     <Layout>
       <Sidebar />
-      <div className="px-6 py-6 bg-gray-50 min-h-screen">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">🗓️ Attendance</h2>
+      <div className="px-6 py-6 bg-gray-900 min-h-screen text-gray-100">
+        <h2 className="text-3xl font-bold mb-6">🗓️ Attendance</h2>
         {role === 'admin' || role === 'hr' ? (
           <AdminSummaryView />
         ) : (

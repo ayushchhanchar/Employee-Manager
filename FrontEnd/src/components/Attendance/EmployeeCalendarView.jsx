@@ -75,12 +75,12 @@ const EmployeeCalendarView = () => {
     if (!status) return null;
 
     const colorMap = {
-      Present: 'text-green-600',
-      Absent: 'text-red-600',
-      Leave: 'text-yellow-600',
-      'Half Day': 'text-orange-500',
-      Holiday: 'text-gray-500',
-      Late: 'text-pink-500',
+      Present: 'text-green-400',
+      Absent: 'text-red-400',
+      Leave: 'text-yellow-400',
+      'Half Day': 'text-orange-400',
+      Holiday: 'text-gray-400',
+      Late: 'text-pink-400',
     };
 
     return (
@@ -96,39 +96,40 @@ const EmployeeCalendarView = () => {
   const isToday = selectedKey === today.toDateString();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-gray-100">
       {/* Today's Quick Actions */}
       {isToday && (
-        <div className="bg-white rounded-lg p-6 shadow">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Today's Attendance</h3>
+        <div className="bg-gray-800 rounded-lg p-6 shadow border border-gray-700">
+          <h3 className="text-lg font-semibold mb-4">Today's Attendance</h3>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-sm text-gray-600">Status: 
+              <p className="text-sm">
+                Status:
                 <span className="font-bold ml-1">
                   {todayAttendance?.status || 'Not Marked'}
                 </span>
               </p>
               {todayAttendance?.checkIn && (
-                <p className="text-sm text-gray-600">
+                <p className="text-sm">
                   Check-in: {new Date(todayAttendance.checkIn).toLocaleTimeString()}
                 </p>
               )}
               {todayAttendance?.checkOut && (
-                <p className="text-sm text-gray-600">
+                <p className="text-sm">
                   Check-out: {new Date(todayAttendance.checkOut).toLocaleTimeString()}
                 </p>
               )}
             </div>
             <div className="flex gap-4">
               <button
-                className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-success disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleCheckIn}
                 disabled={!!todayAttendance?.checkIn}
               >
                 {todayAttendance?.checkIn ? 'Checked In' : 'Check In'}
               </button>
               <button
-                className="bg-red-600 text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-danger disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleCheckOut}
                 disabled={!todayAttendance?.checkIn || !!todayAttendance?.checkOut}
               >
@@ -140,24 +141,24 @@ const EmployeeCalendarView = () => {
       )}
 
       {/* Calendar */}
-      <div className="bg-white rounded-lg p-6 shadow">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Attendance Calendar</h3>
+      <div className="bg-gray-800 rounded-lg p-6 shadow border border-gray-700">
+        <h3 className="text-lg font-semibold mb-4">Attendance Calendar</h3>
         <Calendar
           onChange={(date) => setSelectedDate(date)}
           value={selectedDate}
           tileContent={tileContent}
-          className="w-full"
+          className="w-full react-calendar"
         />
       </div>
 
       {/* Selected Date Details */}
-      <div className="bg-white rounded-lg p-6 shadow">
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+      <div className="bg-gray-800 rounded-lg p-6 shadow border border-gray-700">
+        <h3 className="text-lg font-semibold mb-2">
           Attendance for {selectedDate.toDateString()}
         </h3>
 
         {loading ? (
-          <p className="text-gray-500">Loading...</p>
+          <p className="text-gray-400">Loading...</p>
         ) : selectedAttendance ? (
           <div className="space-y-2">
             <p><span className="font-medium">Status:</span> {selectedAttendance.status}</p>
@@ -175,42 +176,31 @@ const EmployeeCalendarView = () => {
             )}
           </div>
         ) : (
-          <p className="text-gray-500">No attendance record for this day.</p>
+          <p className="text-gray-400">No attendance record for this day.</p>
         )}
       </div>
 
       {/* Legend */}
-      <div className="bg-white rounded-lg p-6 shadow">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Legend</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
-            <span className="text-sm">Present</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
-            <span className="text-sm">Absent</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-yellow-600 rounded-full mr-2"></div>
-            <span className="text-sm">Leave</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
-            <span className="text-sm">Half Day</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-gray-500 rounded-full mr-2"></div>
-            <span className="text-sm">Holiday</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-pink-500 rounded-full mr-2"></div>
-            <span className="text-sm">Late</span>
-          </div>
+      <div className="bg-gray-800 rounded-lg p-6 shadow border border-gray-700">
+        <h3 className="text-lg font-semibold mb-4">Legend</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <LegendItem color="bg-green-600" label="Present" />
+          <LegendItem color="bg-red-600" label="Absent" />
+          <LegendItem color="bg-yellow-600" label="Leave" />
+          <LegendItem color="bg-orange-500" label="Half Day" />
+          <LegendItem color="bg-gray-500" label="Holiday" />
+          <LegendItem color="bg-pink-500" label="Late" />
         </div>
       </div>
     </div>
   );
 };
+
+const LegendItem = ({ color, label }) => (
+  <div className="flex items-center">
+    <div className={`w-3 h-3 ${color} rounded-full mr-2`}></div>
+    <span>{label}</span>
+  </div>
+);
 
 export default EmployeeCalendarView;

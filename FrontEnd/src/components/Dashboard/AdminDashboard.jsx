@@ -134,8 +134,8 @@ const AdminDashboard = () => {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600">Welcome back! Here's what's happening at your company.</p>
+          <h1 className="text-2xl font-bold text-white-900">Admin Dashboard</h1>
+          <p className="text-gray-700">Welcome back! Here's what's happening at your company.</p>
         </div>
         <div className="flex items-center space-x-3">
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
@@ -153,43 +153,44 @@ const AdminDashboard = () => {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Attendance Chart */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Weekly Attendance</h3>
-            <ChartBarIcon className="w-5 h-5 text-gray-400" />
+          {/* Attendance Chart */}
+          <div className=" bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-800">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold  text-gray-100">Weekly Attendance</h3>
+              <ChartBarIcon className="w-5 h-5 text-gray-300" />
+            </div>
+            <Chart
+              type="line"
+              data={attendanceData}
+              xKey="date"
+              yKey="present"
+              color="#3B82F6"
+            />
           </div>
-          <Chart
-            type="line"
-            data={attendanceData}
-            xKey="date"
-            yKey="present"
-            color="#3B82F6"
-          />
+
+          {/* Leave Types Chart */}
+          <div className=" bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-800">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-100">Leave Types Distribution</h3>
+              <ChartBarIcon className="w-5 h-5 text-gray-300" />
+            </div>
+            <Chart
+              type="doughnut"
+              data={leaveData}
+              labelKey="type"
+              valueKey="count"
+            />
+          </div>
         </div>
 
-        {/* Leave Types Chart */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Leave Types Distribution</h3>
-            <ChartBarIcon className="w-5 h-5 text-gray-400" />
+        {/* Recent Activity */}
+        <div className=" bg-gray-800 rounded-lg shadow-sm border border-gray-800 mt-6">
+          <div className="p-6 border-b border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-100">Recent Activity</h3>
           </div>
-          <Chart
-            type="doughnut"
-            data={leaveData}
-            labelKey="type"
-            valueKey="count"
-          />
+          <RecentActivity activities={recentActivities} />
         </div>
-      </div>
 
-      {/* Recent Activity */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
-        </div>
-        <RecentActivity activities={recentActivities} />
-      </div>
     </div>
   );
 };

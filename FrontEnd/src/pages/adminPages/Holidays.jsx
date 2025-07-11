@@ -34,7 +34,6 @@ const Holidays = () => {
       const res = await holidayAPI.getAll(filters);
       setHolidays(res.data.data || []);
     } catch (err) {
-      console.error('Error fetching holidays:', err);
       toast.error('Failed to fetch holidays');
     }
   };
@@ -46,9 +45,9 @@ const Holidays = () => {
 
   const handleFormChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm(prev => ({ 
-      ...prev, 
-      [name]: type === 'checkbox' ? checked : value 
+    setForm(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -112,12 +111,13 @@ const Holidays = () => {
   };
 
   const getTypeColor = (type) => {
+    const base = 'px-2 py-1 rounded-full text-xs font-medium';
     switch (type) {
-      case 'National': return 'text-red-600 bg-red-100';
-      case 'Regional': return 'text-orange-600 bg-orange-100';
-      case 'Company': return 'text-blue-600 bg-blue-100';
-      case 'Optional': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'National': return `${base} text-red-600 bg-red-100 dark:text-red-300 dark:bg-red-800/30`;
+      case 'Regional': return `${base} text-orange-600 bg-orange-100 dark:text-orange-300 dark:bg-orange-700/30`;
+      case 'Company': return `${base} text-blue-600 bg-blue-100 dark:text-blue-300 dark:bg-blue-800/30`;
+      case 'Optional': return `${base} text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/30`;
+      default: return `${base} text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/30`;
     }
   };
 
@@ -126,7 +126,6 @@ const Holidays = () => {
     const holidayDate = new Date(dateString);
     const diffTime = holidayDate - today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Tomorrow';
     if (diffDays < 0) return 'Past';
@@ -136,7 +135,7 @@ const Holidays = () => {
   return (
     <Layout>
       <Sidebar />
-      <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="p-6 bg-gray-900 text-gray-100 min-h-screen">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">🗓️ Holiday Calendar</h2>
           {(user?.role === 'admin' || user?.role === 'hr') && (
@@ -156,14 +155,14 @@ const Holidays = () => {
             name="year"
             value={filters.year}
             onChange={handleInputChange}
-            className="border border-gray-300 rounded-lg px-3 py-2"
+            className="border border-gray-700 bg-gray-800 text-white rounded-lg px-3 py-2"
             placeholder="Year"
           />
           <select
             name="type"
             onChange={handleInputChange}
             value={filters.type}
-            className="border border-gray-300 rounded-lg px-3 py-2"
+            className="border border-gray-700 bg-gray-800 text-white rounded-lg px-3 py-2"
           >
             <option value="">All Types</option>
             <option value="National">National</option>
@@ -175,7 +174,7 @@ const Holidays = () => {
             name="month"
             onChange={handleInputChange}
             value={filters.month}
-            className="border border-gray-300 rounded-lg px-3 py-2"
+            className="border border-gray-700 bg-gray-800 text-white rounded-lg px-3 py-2"
           >
             <option value="">All Months</option>
             {Array.from({ length: 12 }, (_, i) => (
@@ -189,44 +188,42 @@ const Holidays = () => {
         {/* Holiday List */}
         <div className="space-y-4">
           {holidays.map(holiday => (
-            <div key={holiday._id} className="bg-white shadow rounded-lg p-6">
+            <div key={holiday._id} className="bg-gray-800 shadow rounded-lg p-6">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-lg font-semibold">{holiday.name}</h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(holiday.type)}`}>
-                      {holiday.type}
-                    </span>
+                    <span className={getTypeColor(holiday.type)}>{holiday.type}</span>
                     {holiday.isRecurring && (
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-600">
+                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-800/30 text-purple-300">
                         Recurring
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-600 mb-2">{new Date(holiday.date).toDateString()}</p>
+                  <p className="text-gray-300 mb-2">{new Date(holiday.date).toDateString()}</p>
                   {holiday.description && (
-                    <p className="text-gray-700 mb-2">{holiday.description}</p>
+                    <p className="text-gray-200 mb-2">{holiday.description}</p>
                   )}
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-400">
                     <p>Applicable for: {holiday.applicableFor}</p>
                     {holiday.department && <p>Department: {holiday.department}</p>}
                     {holiday.location && <p>Location: {holiday.location}</p>}
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <span className="text-sm text-blue-600 font-medium">
+                  <span className="text-sm text-blue-400 font-medium">
                     {getDaysUntil(holiday.date)}
                   </span>
                   {(user?.role === 'admin' || user?.role === 'hr') && (
                     <div className="flex gap-2">
-                      <button 
-                        className="text-blue-600 hover:text-blue-800 text-sm" 
+                      <button
+                        className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
                         onClick={() => editHoliday(holiday)}
                       >
                         Edit
                       </button>
-                      <button 
-                        className="text-red-500 hover:text-red-700 text-sm" 
+                      <button
+                        className="text-red-400 hover:underline text-sm"
                         onClick={() => deleteHoliday(holiday._id)}
                       >
                         Delete
@@ -239,81 +236,115 @@ const Holidays = () => {
           ))}
         </div>
 
-        {/* Create/Edit Form Modal */}
+        {/* Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+            <div className="bg-gray-800 text-gray-100 rounded-lg p-6 w-full max-w-2xl">
               <h3 className="text-lg font-semibold mb-4">
                 {editingHoliday ? 'Edit Holiday' : 'Add Holiday'}
               </h3>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Holiday Name"
-                  value={form.name}
-                  onChange={handleFormChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                  required
-                />
-                <input
-                  type="date"
-                  name="date"
-                  value={form.date}
-                  onChange={handleFormChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                  required
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <select
-                    name="type"
-                    value={form.type}
+                <div>
+                  <label htmlFor="name" className="block mb-1">Holiday Name</label>
+                  <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    placeholder="Holiday Name"
+                    value={form.name}
                     onChange={handleFormChange}
-                    className="border border-gray-300 rounded-lg px-3 py-2"
-                  >
-                    <option value="National">National</option>
-                    <option value="Regional">Regional</option>
-                    <option value="Company">Company</option>
-                    <option value="Optional">Optional</option>
-                  </select>
-                  <select
-                    name="applicableFor"
-                    value={form.applicableFor}
-                    onChange={handleFormChange}
-                    className="border border-gray-300 rounded-lg px-3 py-2"
-                  >
-                    <option value="All">All</option>
-                    <option value="Department">Department</option>
-                    <option value="Location">Location</option>
-                  </select>
+                    className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
+                    required
+                  />
                 </div>
+
+                <div>
+                  <label htmlFor="date" className="block mb-1">Date</label>
+                  <input
+                    id="date"
+                    type="date"
+                    name="date"
+                    value={form.date}
+                    onChange={handleFormChange}
+                    className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="type" className="block mb-1">Type</label>
+                    <select
+                      id="type"
+                      name="type"
+                      value={form.type}
+                      onChange={handleFormChange}
+                      className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
+                    >
+                      <option value="National">National</option>
+                      <option value="Regional">Regional</option>
+                      <option value="Company">Company</option>
+                      <option value="Optional">Optional</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="applicableFor" className="block mb-1">Applicable For</label>
+                    <select
+                      id="applicableFor"
+                      name="applicableFor"
+                      value={form.applicableFor}
+                      onChange={handleFormChange}
+                      className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
+                    >
+                      <option value="All">All</option>
+                      <option value="Department">Department</option>
+                      <option value="Location">Location</option>
+                    </select>
+                  </div>
+                </div>
+
                 {form.applicableFor === 'Department' && (
-                  <input
-                    type="text"
-                    name="department"
-                    placeholder="Department Name"
-                    value={form.department}
-                    onChange={handleFormChange}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                  />
+                  <div>
+                    <label htmlFor="department" className="block mb-1">Department Name</label>
+                    <input
+                      id="department"
+                      type="text"
+                      name="department"
+                      placeholder="Department Name"
+                      value={form.department}
+                      onChange={handleFormChange}
+                      className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
+                    />
+                  </div>
                 )}
+
                 {form.applicableFor === 'Location' && (
-                  <input
-                    type="text"
-                    name="location"
-                    placeholder="Location"
-                    value={form.location}
-                    onChange={handleFormChange}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                  />
+                  <div>
+                    <label htmlFor="location" className="block mb-1">Location</label>
+                    <input
+                      id="location"
+                      type="text"
+                      name="location"
+                      placeholder="Location"
+                      value={form.location}
+                      onChange={handleFormChange}
+                      className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
+                    />
+                  </div>
                 )}
-                <textarea
-                  name="description"
-                  placeholder="Description (optional)"
-                  value={form.description}
-                  onChange={handleFormChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 h-24"
-                />
+
+                <div>
+                  <label htmlFor="description" className="block mb-1">Description (optional)</label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Description (optional)"
+                    value={form.description}
+                    onChange={handleFormChange}
+                    className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2 h-24"
+                  />
+                </div>
+
                 <label className="flex items-center">
                   <input
                     type="checkbox"
@@ -324,6 +355,7 @@ const Holidays = () => {
                   />
                   <span>Recurring Holiday</span>
                 </label>
+
                 <div className="flex gap-4">
                   <button
                     type="submit"
@@ -347,6 +379,7 @@ const Holidays = () => {
             </div>
           </div>
         )}
+
       </div>
     </Layout>
   );

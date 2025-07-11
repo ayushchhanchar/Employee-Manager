@@ -126,7 +126,7 @@
   }
 
   .input:focus {
-    @apply shadow-lg shadow-blue-500/20 bg-gray-750;
+    @apply shadow-lg shadow-blue-500/20 bg-gray-700;
   }
 
   .btn-primary {
@@ -195,7 +195,7 @@
   }
 
   .table tr:hover {
-    @apply bg-gray-750;
+    @apply bg-gray-700;
   }
 
   /* Form styles for dark theme */

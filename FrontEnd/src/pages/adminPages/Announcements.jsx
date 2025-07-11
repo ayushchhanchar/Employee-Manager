@@ -7,10 +7,7 @@ import { toast } from 'react-hot-toast';
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
-  const [filters, setFilters] = useState({
-    type: '',
-    priority: ''
-  });
+  const [filters, setFilters] = useState({ type: '', priority: '' });
   const [showForm, setShowForm] = useState(false);
   const [editingAnnouncement, setEditingAnnouncement] = useState(null);
   const [form, setForm] = useState({
@@ -32,7 +29,6 @@ const Announcements = () => {
       const res = await announcementAPI.getAll(filters);
       setAnnouncements(res.data.data || []);
     } catch (err) {
-      console.error('Error fetching announcements:', err);
       toast.error('Failed to fetch announcements');
     }
   };
@@ -59,19 +55,23 @@ const Announcements = () => {
       }
       setShowForm(false);
       setEditingAnnouncement(null);
-      setForm({
-        title: '',
-        content: '',
-        type: 'General',
-        priority: 'Medium',
-        targetAudience: 'All',
-        department: '',
-        expiryDate: ''
-      });
+      resetForm();
       fetchAnnouncements();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to save announcement');
     }
+  };
+
+  const resetForm = () => {
+    setForm({
+      title: '',
+      content: '',
+      type: 'General',
+      priority: 'Medium',
+      targetAudience: 'All',
+      department: '',
+      expiryDate: ''
+    });
   };
 
   const markAsRead = async (id) => {
@@ -79,8 +79,7 @@ const Announcements = () => {
       await announcementAPI.markAsRead(id);
       fetchAnnouncements();
       toast.success('Marked as read');
-    } catch (err) {
-      console.error('Failed to mark as read:', err);
+    } catch {
       toast.error('Failed to mark as read');
     }
   };
@@ -91,58 +90,56 @@ const Announcements = () => {
         await announcementAPI.delete(id);
         fetchAnnouncements();
         toast.success('Announcement deleted');
-      } catch (err) {
-        console.error('Delete error:', err);
+      } catch {
         toast.error('Failed to delete announcement');
       }
     }
   };
 
-  const editAnnouncement = (announcement) => {
-    setEditingAnnouncement(announcement);
+  const editAnnouncement = (ann) => {
+    setEditingAnnouncement(ann);
     setForm({
-      title: announcement.title,
-      content: announcement.content,
-      type: announcement.type,
-      priority: announcement.priority,
-      targetAudience: announcement.targetAudience,
-      department: announcement.department || '',
-      expiryDate: announcement.expiryDate ? announcement.expiryDate.split('T')[0] : ''
+      title: ann.title,
+      content: ann.content,
+      type: ann.type,
+      priority: ann.priority,
+      targetAudience: ann.targetAudience,
+      department: ann.department || '',
+      expiryDate: ann.expiryDate ? ann.expiryDate.split('T')[0] : ''
     });
     setShowForm(true);
   };
 
   const getPriorityColor = (priority) => {
+    const base = 'px-2 py-1 rounded-full text-xs font-medium';
     switch (priority) {
-      case 'High': return 'text-red-600 bg-red-100';
-      case 'Medium': return 'text-yellow-600 bg-yellow-100';
-      case 'Low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'High': return `${base} text-red-600 bg-red-100 dark:text-red-300 dark:bg-red-800/30`;
+      case 'Medium': return `${base} text-yellow-600 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-700/30`;
+      case 'Low': return `${base} text-green-600 bg-green-100 dark:text-green-300 dark:bg-green-800/30`;
+      default: return `${base} text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/30`;
     }
   };
 
   const getTypeColor = (type) => {
+    const base = 'px-2 py-1 rounded-full text-xs font-medium';
     switch (type) {
-      case 'Urgent': return 'text-red-600 bg-red-100';
-      case 'Important': return 'text-orange-600 bg-orange-100';
-      case 'General': return 'text-blue-600 bg-blue-100';
-      case 'Holiday': return 'text-purple-600 bg-purple-100';
-      case 'Event': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'Urgent': return `${base} text-red-600 bg-red-100 dark:text-red-300 dark:bg-red-800/30`;
+      case 'Important': return `${base} text-orange-600 bg-orange-100 dark:text-orange-300 dark:bg-orange-700/30`;
+      case 'General': return `${base} text-blue-600 bg-blue-100 dark:text-blue-300 dark:bg-blue-800/30`;
+      case 'Holiday': return `${base} text-purple-600 bg-purple-100 dark:text-purple-300 dark:bg-purple-800/30`;
+      case 'Event': return `${base} text-green-600 bg-green-100 dark:text-green-300 dark:bg-green-800/30`;
+      default: return `${base} text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/30`;
     }
   };
 
   return (
-    <Layout>  
+    <Layout>
       <Sidebar />
-      <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="p-6  dark:bg-gray-900 min-h-screen  dark:text-gray-100">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">📢 Company Announcements</h2>
           {(user?.role === 'admin' || user?.role === 'hr') && (
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-            >
+            <button onClick={() => setShowForm(true)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
               Create Announcement
             </button>
           )}
@@ -154,7 +151,7 @@ const Announcements = () => {
             name="type"
             value={filters.type}
             onChange={handleInputChange}
-            className="border border-gray-300 rounded-lg px-3 py-2"
+            className="border border-gray-600  bg-gray-800 text-gray-100 rounded-lg px-3 py-2"
           >
             <option value="">All Types</option>
             <option value="General">General</option>
@@ -167,7 +164,7 @@ const Announcements = () => {
             name="priority"
             value={filters.priority}
             onChange={handleInputChange}
-            className="border border-gray-300 rounded-lg px-3 py-2"
+            className="border border-gray-600 bg-gray-800 text-gray-100 rounded-lg px-3 py-2"
           >
             <option value="">All Priorities</option>
             <option value="Low">Low</option>
@@ -179,20 +176,16 @@ const Announcements = () => {
         {/* Announcements List */}
         <div className="space-y-4">
           {announcements.map((ann) => (
-            <div key={ann._id} className="bg-white rounded-lg shadow p-6">
+            <div key={ann._id} className="border border-gray-600 bg-gray-800 rounded-lg shadow p-6">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-lg font-semibold">{ann.title}</h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(ann.type)}`}>
-                      {ann.type}
-                    </span>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(ann.priority)}`}>
-                      {ann.priority}
-                    </span>
+                    <span className={getTypeColor(ann.type)}>{ann.type}</span>
+                    <span className={getPriorityColor(ann.priority)}>{ann.priority}</span>
                   </div>
-                  <p className="text-gray-700 mb-3">{ann.content}</p>
-                  <div className="text-sm text-gray-500">
+                  <p className="text-gray-300 mb-3">{ann.content}</p>
+                  <div className="text-sm text-gray-400">
                     <p>Target: {ann.targetAudience}</p>
                     {ann.department && <p>Department: {ann.department}</p>}
                     <p>Created: {new Date(ann.createdAt).toLocaleDateString()}</p>
@@ -201,27 +194,18 @@ const Announcements = () => {
                 </div>
                 <div className="flex flex-col gap-2 ml-4">
                   {ann.readBy?.some(r => r.user === user?._id) ? (
-                    <span className="text-green-600 text-sm font-medium">✓ Read</span>
+                    <span className="text-green-600 dark:text-green-400 text-sm font-medium">✓ Read</span>
                   ) : (
-                    <button
-                      onClick={() => markAsRead(ann._id)}
-                      className="text-blue-600 hover:text-blue-800 text-sm"
-                    >
+                    <button onClick={() => markAsRead(ann._id)} className="text-blue-600 dark:text-blue-400 text-sm hover:underline">
                       Mark as Read
                     </button>
                   )}
                   {(user?.role === 'admin' || user?.role === 'hr') && (
                     <>
-                      <button 
-                        className="text-yellow-600 hover:text-yellow-800 text-sm" 
-                        onClick={() => editAnnouncement(ann)}
-                      >
+                      <button className="text-yellow-600 dark:text-yellow-400 text-sm hover:underline" onClick={() => editAnnouncement(ann)}>
                         Edit
                       </button>
-                      <button 
-                        className="text-red-500 hover:text-red-700 text-sm" 
-                        onClick={() => deleteAnnouncement(ann._id)}
-                      >
+                      <button className="text-red-500 dark:text-red-400 text-sm hover:underline" onClick={() => deleteAnnouncement(ann._id)}>
                         Delete
                       </button>
                     </>
@@ -232,10 +216,10 @@ const Announcements = () => {
           ))}
         </div>
 
-        {/* Create/Edit Form Modal */}
+        {/* Create/Edit Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+            <div className="bg-gray-800 text-gray-100 rounded-lg p-6 w-full max-w-2xl">
               <h3 className="text-lg font-semibold mb-4">
                 {editingAnnouncement ? 'Edit Announcement' : 'Create Announcement'}
               </h3>
@@ -246,7 +230,7 @@ const Announcements = () => {
                   placeholder="Title"
                   value={form.title}
                   onChange={handleFormChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg px-3 py-2"
                   required
                 />
                 <textarea
@@ -254,7 +238,7 @@ const Announcements = () => {
                   placeholder="Content"
                   value={form.content}
                   onChange={handleFormChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 h-32"
+                  className="w-full border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2 h-32"
                   required
                 />
                 <div className="grid grid-cols-2 gap-4">
@@ -262,7 +246,7 @@ const Announcements = () => {
                     name="type"
                     value={form.type}
                     onChange={handleFormChange}
-                    className="border border-gray-300 rounded-lg px-3 py-2"
+                    className="border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
                   >
                     <option value="General">General</option>
                     <option value="Important">Important</option>
@@ -274,7 +258,7 @@ const Announcements = () => {
                     name="priority"
                     value={form.priority}
                     onChange={handleFormChange}
-                    className="border border-gray-300 rounded-lg px-3 py-2"
+                    className="borderborder-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
                   >
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
@@ -286,7 +270,7 @@ const Announcements = () => {
                     name="targetAudience"
                     value={form.targetAudience}
                     onChange={handleFormChange}
-                    className="border border-gray-300 rounded-lg px-3 py-2"
+                    className="border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
                   >
                     <option value="All">All</option>
                     <option value="Employees">Employees</option>
@@ -301,7 +285,7 @@ const Announcements = () => {
                       placeholder="Department Name"
                       value={form.department}
                       onChange={handleFormChange}
-                      className="border border-gray-300 rounded-lg px-3 py-2"
+                      className="border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
                     />
                   )}
                 </div>
@@ -310,13 +294,10 @@ const Announcements = () => {
                   name="expiryDate"
                   value={form.expiryDate}
                   onChange={handleFormChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  className="w-full border border-gray-600 bg-gray-700 dark:text-white rounded-lg px-3 py-2"
                 />
                 <div className="flex gap-4">
-                  <button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                  >
+                  <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                     {editingAnnouncement ? 'Update' : 'Create'}
                   </button>
                   <button
@@ -324,15 +305,7 @@ const Announcements = () => {
                     onClick={() => {
                       setShowForm(false);
                       setEditingAnnouncement(null);
-                      setForm({
-                        title: '',
-                        content: '',
-                        type: 'General',
-                        priority: 'Medium',
-                        targetAudience: 'All',
-                        department: '',
-                        expiryDate: ''
-                      });
+                      resetForm();
                     }}
                     className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
                   >

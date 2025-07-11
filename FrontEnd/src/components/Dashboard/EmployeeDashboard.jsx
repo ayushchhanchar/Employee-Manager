@@ -162,7 +162,7 @@ const EmployeeDashboard = () => {
   ];
 
   return (
-    <div className="space-y-6 fade-in">
+    <div className="space-y-6 fade-in pl-6">
       {/* Welcome Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 rounded-2xl p-8 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
