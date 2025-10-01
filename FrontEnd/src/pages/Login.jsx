@@ -122,7 +122,6 @@ const Login = () => {
               <a href="#" className="text-blue-400 hover:underline">Forgot password?</a>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -139,7 +138,6 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Register Prompt */}
           <div className="mt-6 text-center text-sm text-gray-400">
             Don't have an account?{' '}
             <a href="/register" className="text-blue-400 font-medium hover:underline">Register here</a>

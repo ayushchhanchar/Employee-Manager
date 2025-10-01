@@ -13,8 +13,6 @@ class NotificationService {
     }
   }
 
-  // Get user notifications
- // Get user notifications with filters
 static async getUserNotifications(userId, page = 1, limit = 20, filters = {}) {
   try {
     const skip = (page - 1) * limit;
